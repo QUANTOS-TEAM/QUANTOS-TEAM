@@ -581,7 +581,7 @@ function initContactFormValidation() {
 async function loadSiteVariables() {
     try {
       // Fetch the variables.json file
-      const response = await fetch('/variables.json');
+      const response = await fetch('variables.json');
       if (!response.ok) {
         throw new Error('Failed to load site variables');
       }
