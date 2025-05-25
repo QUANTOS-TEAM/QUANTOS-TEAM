@@ -164,7 +164,7 @@ async function initMinimalSlider() {
     
     try {
         // Fetch posts data from JSON file
-        const response = await fetch('/posts/posts.json');
+        const response = await fetch('posts/posts.json');
         if (!response.ok) {
             throw new Error('Failed to load posts data');
         }
@@ -204,10 +204,10 @@ async function initMinimalSlider() {
                     <span class="post-type">${post.postType}</span>
                     <h3>${post.title}</h3>
                     <p>${post.excerpt}</p>
-                    <a href="/posts/${post.folder}/index.html" class="btn">Read More</a>
+                    <a href="posts/${post.folder}/index.html" class="btn">Read More</a>
                 </div>
                 <div class="minimal-slide-image">
-                    <img src="/posts/${post.folder}/thumbnail.png" alt="${post.title}">
+                    <img src="posts/${post.folder}/thumbnail.png" alt="${post.title}">
                 </div>
             `;
             
@@ -314,7 +314,7 @@ async function loadPosts() {
   try {
     // Fetch posts data once
     if (allPosts.length === 0) {
-      const response = await fetch('/posts/posts.json');
+      const response = await fetch('posts/posts.json');
       if (!response.ok) {
         throw new Error('Failed to load posts');
       }
@@ -355,14 +355,14 @@ function displayPostsPage(page) {
     const postHTML = `
       <div class="post-card" data-post="${post.tags[0]}">
         <div class="post-image">
-          <img src="/posts/${post.folder}/thumbnail.png" alt="${post.title}">
+          <img src="posts/${post.folder}/thumbnail.png" alt="${post.title}">
         </div>
         <div class="post-content">
           <span class="post-type">${post.postType}</span>
           <h3 class="post-title">${post.title}</h3>
           <p class="post-date">${post.date}</p>
           <p class="post-excerpt">${post.excerpt}</p>
-          <a href="/posts/${post.folder}/index.html" class="btn">Read More</a>
+          <a href="posts/${post.folder}/index.html" class="btn">Read More</a>
         </div>
       </div>
     `;
