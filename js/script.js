@@ -1,5 +1,7 @@
 // Main JavaScript file for Research Group Website
 
+console.log('script.js loaded');
+
 // DOM Content Loaded Event - Main initialization
 document.addEventListener('DOMContentLoaded', function() {
     // Load header and footer
