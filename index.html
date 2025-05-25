@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUANTOS</title>
+    <meta name="description" content="Welcome to our research group.">
+    <!-- Favicon -->
+     # WARN update the icon
+    <link rel="icon" href="img/icon.svg">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1><span data-variable="teamNameLong"></span></h1>
+                <p><span data-variable="teamStatement"></span></p>
+                <a href="about.html" class="btn">Learn More</a>
+            </div>
+        </section>
+
+
+        <!-- Highlights Slider -->
+
+        
+        <section class="container highlights-container">
+            <div class="minimal-slider">
+                <div id="minimal-slides-container" class="minimal-slides-container">
+                    <!-- Slides will be added here -->
+                </div>
+                
+                <!-- Navigation dots -->
+                <div id="minimal-slider-dots" class="minimal-slider-dots"></div>
+                
+                <!-- Navigation buttons -->
+                <button id="minimal-prev" class="minimal-slider-btn minimal-prev">❮</button>
+                <button id="minimal-next" class="minimal-slider-btn minimal-next">❯</button>
+            </div>
+        </section>
+
+        <!-- News Feed -->
+        <section class="container news-feed">
+            <h2>Latest News & Research</h2>
+            
+            <div class="news-filter">
+                <button class="filter-btn active" data-filter="all">All Posts</button>
+                <button class="filter-btn" data-filter="news">News</button>
+                <button class="filter-btn" data-filter="tutorial">Tutorials</button>
+                <!-- <button class="filter-btn" data-filter="lab4">Lab 4</button> -->
+            </div>
+            
+            <!-- Posts Container - Will be populated dynamically from JSON -->
+            <div id="posts-container" class="posts-grid">
+                <!-- Fallback static posts in case JavaScript is disabled -->
+                <!-- Post 1 -->
+                <!-- <div class="post-card" data-lab="lab1">
+                    <div class="post-image">
+                        <img src="posts/post1/thumbnail.jpg" alt="Data processing research">
+                    </div>
+                    
+                </div> -->
+                
+                <!-- These static posts will be replaced by JavaScript if it's enabled -->
+            </div>
+            
+            <!-- <div class="text-center" style="margin-top: 2rem; text-align: center;">
+                <a href="#" class="btn">Load More</a>
+            </div> -->
+
+            <div class="pagination">
+                <button id="prev-page" class="pagination-btn" disabled>&laquo; Previous</button>
+                <div id="page-numbers" class="page-numbers">
+                  <span class="current-page">1</span>
+                </div>
+                <button id="next-page" class="pagination-btn">Next &raquo;</button>
+            </div>
+        </section>
+
+
+
+        
+
+        <!-- Lab Introduction -->
+        <section class="container">
+            <h2>Research Lines</h2>
+            <div class="mission-vision-grid">
+                <div class="mission-box">
+                    <h3>Paraxial Fluids of Light</h3>
+                    <p>Focused on developing analogue quantum simulations with paraxial fluids of light supported by photorefractive media.</p>
+                    <a href="paraxial_fluids_of_light.html" class="btn">Learn More</a>
+                </div>
+                
+                <div class="vision-box">
+                    <h3>Quantum Imaging and Sensing </h3>
+                    <p>Focused on exploring single photon sources and their application for quantum imaging and quantum sensing.</p>
+                    <a href="quantum_imaging.html" class="btn">Learn More</a>
+                </div>
+                
+                <div class="mission-box">
+                    <h3>Optical Computing and Sensing in Complex Media</h3>
+                    <p>Focused in using the formalism of reservoir computer and extreme learning machines for developing all optical computing a using the transmission matrix formalism for enhancing optical sensors.</p>
+                    <a href="optical_computing.html" class="btn">Learn More</a>
+                </div>
+                
+                <div class="vision-box">
+                    <h3>Spectral Imaging </h3>
+                    <p>Focused on using LIBS and XRF imaging for industrial applications</p>
+                    <a href="spectral_imaging.html" class="btn">Learn More</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer - Include this footer div in all posts -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Main JavaScript -->
+    <script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+
+
+
+[
+
+    {
+        "id": "post_2025_04_01",
+        "folder": "post_2025_04_01",
+        "title": "And the laboratory goes QUANTUM",
+        "date": "April 6, 2025",
+        "postType": "News",
+        "excerpt": "The quantum imaging and sensing team made the first experimental observations of the quantum nature of light. With a GRA experiment, the probed the light anti-bunching, a hallmark of the quantum nature of light.",
+        "tags": ["news", "highlight"],
+        "author": "Tiago D. Ferreira"
+    },
+
+    {
+        "id": "post_2024_12_13",
+        "folder": "post_2024_12_13",
+        "title": "New paper published in Physical Review Letter: Digital Feedback Loop in Paraxial Fluids of Light: A Gate to New Phenomena in Analog Physical Simulations",
+        "date": "December 13, 2024",
+        "postType": "News",
+        "excerpt": "The imaging team has recently published a paper in the in the renowned scientific journal Physical Review Letter that explores the next generation of analogue simulations with paraxial fluids of light.",
+        "tags": ["news", "tutorial", "highlight"],
+        "author": "Tiago D. Ferreira"
+    }
+
+
+
+
+
+
+
+
+]

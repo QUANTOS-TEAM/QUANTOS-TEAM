@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Paper in Physical Review Letters</title>
+    <meta name="description" content="New Paper published in Physical Review Letters">
+    <!-- Favicon -->
+    <link rel="icon" href="/img/favicon.ico">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <script>
+        // Custom delimiters for LaTeX
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']],
+            processEscapes: true
+          },
+          startup: {
+            pageReady() {
+              return MathJax.startup.defaultPageReady().then(() => {
+                console.log('Initial MathJax typesetting complete');
+              });
+            }
+          }
+        };
+      </script>
+      <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+    
+
+</head>
+<body>
+
+    <div id="header-placeholder"></div>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Post Header -->
+        <section class="post-header">
+            <div class="post-header-content">
+                <span class="post-lab">News</span>
+                <h1>New paper published in Physical Review Letter!</h1>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- Post Meta -->
+            <div class="post-meta">
+                <div class="post-author">
+                    <img src="/img/teams/tiago_ferreira.jpg" alt="Tiago D. Ferreira">
+                    <div>
+                        <p><strong>Tiago D. Ferreira</strong></p>
+                        <p>December 13, 2024</p>
+                    </div>
+                </div>
+            
+            </div>
+            
+            <!-- Post Content -->
+            <div class="post-content">
+                <!-- Your post content here -->
+                
+                <!-- Rest of your content -->
+            </div>
+            
+        </div>
+    </main>
+
+
+    
+    <!-- Footer - Include this footer div in all posts -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Main JavaScript -->
+    <script src="/js/script.js"></script>
+</body>
+</html>
