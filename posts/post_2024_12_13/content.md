@@ -18,7 +18,7 @@ To overcome the inherent limitations of analogue simulations with paraxial fluid
 
 This approach not only enhances the versatility of paraxial fluids of light as analogue quantum simulators but also opens new avenues for observing long-time evolutions and complex phenomena that were previously inaccessible. The method provides a powerful experimental tool for exploring nonlinear dynamics, turbulence, and quantum-like behavior with unprecedented control.
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2rem auto; text-align: center;">
-  <img src="/posts/post_2024_12_13/conceptual_scheme.png" alt="Conceptual scheme Setup" width="600">
+  <img src="posts/post_2024_12_13/conceptual_scheme.png" alt="Conceptual scheme Setup" width="600">
   <figcaption style="font-style: italic; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Figure 1 - Schematic and conceptual scheme of the digital feedback loop.</figcaption>
 </figure>
 
