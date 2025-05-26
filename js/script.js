@@ -44,9 +44,11 @@ function loadHeader() {
     if (!headerPlaceholder) return;
     
     // Determine correct path based on location
-    const headerPath = window.location.pathname.includes('/posts/') 
-        ? '../../header.html' 
-        : 'header.html';
+    // const headerPath = window.location.pathname.includes('/posts/') 
+    //     ? '../../header.html' 
+    //     : 'header.html';
+
+    const headerPath = '/header.html';
     
     fetch(headerPath)
         .then(response => {
