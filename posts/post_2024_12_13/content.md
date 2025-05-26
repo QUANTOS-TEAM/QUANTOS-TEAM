@@ -30,7 +30,7 @@ We tested the digital feedback loop in two distinct configurations. First, we in
 <div class="figure-grid">
   <figure>
     <img
-      src="/posts/post_2024_12_13/dark_soliton_old_method.jpg"
+      src="posts/post_2024_12_13/dark_soliton_old_method.jpg"
       alt="Dark soliton decay by the old method"
       width="600"
     >
@@ -39,7 +39,7 @@ We tested the digital feedback loop in two distinct configurations. First, we in
 
   <figure>
     <img
-      src="/posts/post_2024_12_13/dark_soliton_gif.gif"
+      src="posts/post_2024_12_13/dark_soliton_gif.gif"
       alt="Dark solition decay using the new method."
       width="600"
     >
