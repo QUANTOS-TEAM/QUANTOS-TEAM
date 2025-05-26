@@ -49,7 +49,7 @@ We tested the digital feedback loop in two distinct configurations. First, we in
 <div class="figure-grid">
   <figure>
     <img
-      src="/posts/post_2024_12_13/guassian_collider_old_method.jpg"
+      src="posts/post_2024_12_13/guassian_collider_old_method.jpg"
       alt="Experimental Setup A"
       width="600"
     >
@@ -58,7 +58,7 @@ We tested the digital feedback loop in two distinct configurations. First, we in
 
   <figure>
     <img
-      src="/posts/post_2024_12_13/gaussian_collider_gif.gif"
+      src="posts/post_2024_12_13/gaussian_collider_gif.gif"
       alt="Experimental Setup B"
       width="600"
     >
