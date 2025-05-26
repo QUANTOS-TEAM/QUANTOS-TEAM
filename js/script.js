@@ -48,7 +48,7 @@ function loadHeader() {
     //     ? '../../header.html' 
     //     : 'header.html';
 
-    const headerPath = '/header.html';
+    const headerPath = 'header.html';
     
     fetch(headerPath)
         .then(response => {
