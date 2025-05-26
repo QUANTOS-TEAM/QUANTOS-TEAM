@@ -77,9 +77,11 @@ function loadFooter() {
     if (!footerPlaceholder) return;
     
     // Determine correct path based on location
-    const footerPath = window.location.pathname.includes('/posts/') 
-        ? '../../footer.html' 
-        : 'footer.html';
+    // const footerPath = window.location.pathname.includes('/posts/') 
+    //     ? '../../footer.html' 
+    //     : 'footer.html';
+
+    const footerPath = 'footer.html';
     
     fetch(footerPath)
         .then(response => {
