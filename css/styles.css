@@ -175,6 +175,11 @@ nav ul li a.active {
   font-size: 1.5rem;
 }
 
+#team-link:hover,
+#team-link:focus {
+  text-decoration: none;
+}
+
 /* ===== Main Content ===== */
 main {
   margin-top: 80px; /* Height of the fixed header */
