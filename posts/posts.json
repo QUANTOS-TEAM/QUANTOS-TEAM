@@ -1,8 +1,6 @@
 
-
-
 [
-
+    
     {
         "id": "post_2025_04_01",
         "folder": "post_2025_04_01",
@@ -21,14 +19,9 @@
         "date": "December 13, 2024",
         "postType": "News",
         "excerpt": "The imaging team has recently published a paper in the in the renowned scientific journal Physical Review Letter that explores the next generation of analogue simulations with paraxial fluids of light.",
-        "tags": ["news", "tutorial", "highlight"],
+        "tags": ["news", "highlight"],
         "author": "Tiago D. Ferreira"
     }
-
-
-
-
-
 
 
 
