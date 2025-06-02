@@ -746,68 +746,65 @@ async function loadSiteVariables() {
   
 
 
-  function loadMarkdownContent() {
+async function loadMarkdownContent() {
     const postContent = document.querySelector('.post-content');
     if (!postContent) return;
     
-    // Get the current path
+    // Get the current path and extract folder name
     const currentPath = window.location.pathname;
-    const postFolder = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+    const folderParts = currentPath.split('/').filter(part => part !== '');
+    const postFolderName = folderParts[folderParts.length - 2]; // -2 because last part is index.html
     
-    // Fetch the markdown file
-    fetch(BASE_PATH + postFolder + 'content.md')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to load markdown content: ' + response.status);
+    try {
+        // Since we're inside /posts/[post-folder]/index.html, we need to go up two levels
+        const postsJsonPath = '../../posts/posts.json';
+        // console.log('Loading posts.json from:', postsJsonPath);
+        
+        // Fetch posts.json to get the markdown filename
+        const postsResponse = await fetch(postsJsonPath);
+        if (!postsResponse.ok) {
+            throw new Error(`Failed to load posts.json: ${postsResponse.status}`);
         }
-        return response.text();
-      })
-      .then(markdown => {
+        
+        const posts = await postsResponse.json();
+        const currentPost = posts.find(post => post.folder === postFolderName);
+        
+        if (!currentPost || !currentPost.md_file_name) {
+            throw new Error(`No markdown file specified for post: ${postFolderName}`);
+        }
+        
+        // Load the markdown file from the same directory as index.html
+        const markdownPath = currentPost.md_file_name + ".md";
+        // console.log('Loading markdown from:', markdownPath);
+        
+        const markdownResponse = await fetch(markdownPath);
+        if (!markdownResponse.ok) {
+            throw new Error(`Failed to load markdown: ${markdownResponse.status}`);
+        }
+        
+        const markdown = await markdownResponse.text();
+        
         // Process the markdown content to protect LaTeX
         let processedMarkdown = markdown
-          // Replace display math with placeholders
-          .replace(/\$\$([\s\S]*?)\$\$/g, function(match) {
-            return '<!--MATH_DISPLAY:' + btoa(match) + '-->';
-          })
-          // Replace inline math with placeholders
-          .replace(/\$([\s\S]*?)\$/g, function(match) {
-            return '<!--MATH_INLINE:' + btoa(match) + '-->';
-          });
+            .replace(/\$\$([\s\S]*?)\$\$/g, match => '<!--MATH_DISPLAY:' + btoa(match) + '-->')
+            .replace(/\$([\s\S]*?)\$/g, match => '<!--MATH_INLINE:' + btoa(match) + '-->');
         
-        // Parse markdown with placeholders
+        // Parse markdown and restore LaTeX
         let html = marked.parse(processedMarkdown);
-        
-        // Restore LaTeX
         html = html
-          .replace(/<!--MATH_DISPLAY:(.*?)-->/g, function(match, p1) {
-            return atob(p1);
-          })
-          .replace(/<!--MATH_INLINE:(.*?)-->/g, function(match, p1) {
-            return atob(p1);
-          });
+            .replace(/<!--MATH_DISPLAY:(.*?)-->/g, (match, p1) => atob(p1))
+            .replace(/<!--MATH_INLINE:(.*?)-->/g, (match, p1) => atob(p1));
         
         // Update content
         postContent.innerHTML = html;
         
-        // Force MathJax to process the page
-        if (window.MathJax) {
-          console.log("Processing equations with MathJax...");
-          if (typeof MathJax.typeset === 'function') {
+        // Process MathJax
+        if (window.MathJax && typeof MathJax.typeset === 'function') {
             MathJax.typeset();
-          } else if (typeof MathJax.Hub !== 'undefined') {
-            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
-          }
-          
-          // Add a backup typesetting attempt after a delay
-          setTimeout(() => {
-            if (typeof MathJax.typeset === 'function') {
-              MathJax.typeset();
-            }
-          }, 500);
         }
-      })
-      .catch(error => {
+        
+    } catch (error) {
         console.error('Error loading markdown content:', error);
         postContent.innerHTML = '<p>Error loading content. Please try again later.</p>';
-      });
-  }
+    }
+}
