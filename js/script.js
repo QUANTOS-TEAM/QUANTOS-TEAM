@@ -148,6 +148,7 @@ function loadFooter() {
 /**
  * Sets active navigation link based on current page
  */
+
 function setActiveNavLink() {
     const currentPage = window.location.pathname;
     const navLinks = document.querySelectorAll('nav ul li a');
@@ -156,17 +157,65 @@ function setActiveNavLink() {
         // Remove active class from all links
         link.classList.remove('active');
         
-        const href = link.getAttribute('href');
+        let href = link.getAttribute('href');
         
-        // Add active class to the current page link
-        if (currentPage.endsWith(href) || 
-            (currentPage.endsWith('/') && href === '/index.html') ||
-            (currentPage.includes('/posts/') && href === '/index.html') ||
-            (currentPage.includes('/lab') && href === '/laboratories.html')) {
+        // For post pages, clean up the href for comparison
+        if (isPostPage() && href.startsWith('../../')) {
+            href = href.replace('../../', '');
+        }
+        
+        // Determine if this link should be active
+        let shouldBeActive = false;
+        
+        if (isPostPage()) {
+            // For post pages, you might want to highlight "Home" or leave no nav active
+            // Option 1: Highlight "Home" for all posts
+            if (href === 'index.html') {
+                shouldBeActive = true;
+            }
+            // Option 2: Leave no navigation highlighted (comment out the above)
+        } else {
+            // For regular pages
+            const currentPageName = currentPage.split('/').pop();
+            
+            if (
+                // Exact match
+                currentPageName === href ||
+                // Root matches index.html
+                (currentPage.endsWith('/') && href === 'index.html') ||
+                // Special case for laboratories
+                (currentPage.includes('/lab') && href === 'laboratories.html')
+            ) {
+                shouldBeActive = true;
+            }
+        }
+        
+        if (shouldBeActive) {
             link.classList.add('active');
         }
     });
 }
+
+
+// function setActiveNavLink() {
+//     const currentPage = window.location.pathname;
+//     const navLinks = document.querySelectorAll('nav ul li a');
+    
+//     navLinks.forEach(link => {
+//         // Remove active class from all links
+//         link.classList.remove('active');
+        
+//         const href = link.getAttribute('href');
+        
+//         // Add active class to the current page link
+//         if (currentPage.endsWith(href) || 
+//             (currentPage.endsWith('/') && href === '/index.html') ||
+//             (currentPage.includes('/posts/') && href === '/index.html') ||
+//             (currentPage.includes('/lab') && href === '/laboratories.html')) {
+//             link.classList.add('active');
+//         }
+//     });
+// }
 
 /**
  * Initializes mobile navigation functionality
@@ -254,7 +303,7 @@ async function initMinimalSlider() {
                     <span class="post-type">${post.postType}</span>
                     <h3>${post.title}</h3>
                     <p>${post.excerpt}</p>
-                    <a href="posts/${post.folder}/index.html" class="btn">Read More</a>
+                    <a href="posts/${post.folder}/${post.index_file_name}.html" class="btn">Read More</a>
                 </div>
                 <div class="minimal-slide-image">
                     <img src="posts/${post.folder}/thumbnail.png" alt="${post.title}">
@@ -412,7 +461,7 @@ function displayPostsPage(page) {
           <h3 class="post-title">${post.title}</h3>
           <p class="post-date">${post.date}</p>
           <p class="post-excerpt">${post.excerpt}</p>
-          <a href="posts/${post.folder}/index.html" class="btn">Read More</a>
+          <a href="posts/${post.folder}/${post.index_file_name}.html" class="btn">Read More</a>
         </div>
       </div>
     `;
