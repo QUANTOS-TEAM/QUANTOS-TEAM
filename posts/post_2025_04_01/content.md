@@ -12,7 +12,7 @@ As an initial test and experimental demonstration of our setup's capabilities, w
 
 The simple experimental setup employed in this initial study is illustrated in Figure 1
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2rem auto; text-align: center;">
-  <img src="posts/post_2025_04_01/experimental_setup.png" alt="Experimental Setup" width="600">
+  <img src="../../posts/post_2025_04_01/experimental_setup.png" alt="Experimental Setup" width="600">
   <figcaption style="font-style: italic; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Figure 1 - Experimental Setup.</figcaption>
 </figure>
 
@@ -35,7 +35,7 @@ Depending on the specific light source, we have the following scenarios:
 
 As expected, we clearly observe a pronounced dip at $\tau = 0$, and the experimentally measured second-order correlation function is
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2rem auto; text-align: center;">
-  <img src="posts/post_2025_04_01/thumbnail.png" alt="Experimental Setup" width="600">
+  <img src="../../posts/post_2025_04_01/thumbnail.png" alt="Experimental Setup" width="600">
   <figcaption style="font-style: italic; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Figure 2 - Second order correlation function as a function of the delay $\tau$ for the GRA experiment.</figcaption>
 </figure>
 

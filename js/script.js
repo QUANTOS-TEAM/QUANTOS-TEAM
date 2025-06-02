@@ -1,6 +1,22 @@
 // Main JavaScript file for Research Group Website
 
-console.log('script.js loaded');
+const getBasePath = () => {
+    // Check if we're in a subdirectory (GitHub Pages)
+    const pathArray = window.location.pathname.split('/');
+    const hasSubdirectory = pathArray.length > 2 && pathArray[1] !== '' && !pathArray[1].includes('.html');
+    
+    if (hasSubdirectory && window.location.hostname.includes('github.io')) {
+        return '/' + pathArray[1] + '/';
+    }
+    return '';
+};
+
+const isPostPage = () => {
+    return window.location.pathname.includes('/posts/');
+};
+
+const BASE_PATH = getBasePath();
+
 
 // DOM Content Loaded Event - Main initialization
 document.addEventListener('DOMContentLoaded', function() {
@@ -48,7 +64,9 @@ function loadHeader() {
     //     ? '../../header.html' 
     //     : 'header.html';
 
-    const headerPath = 'header.html';
+    const headerPath_temp = isPostPage() ? '../../header.html' : 'header.html';
+
+    const headerPath = BASE_PATH + headerPath_temp;
     
     fetch(headerPath)
         .then(response => {
@@ -58,6 +76,19 @@ function loadHeader() {
             return response.text();
         })
         .then(data => {
+            // If we're in a post, adjust the paths in the header HTML
+            if (isPostPage()) {
+                // Fix image sources (including the logo)
+                data = data.replace(/src="img\//g, 'src="../../img/');
+                // Fix all HTML links (navigation links like index.html, about.html, etc.)
+                data = data.replace(/href="([^"]*\.html)"/g, function(match, p1) {
+                    // Don't modify external links or anchors
+                    if (p1.startsWith('http') || p1.startsWith('#')) {
+                        return match;
+                    }
+                    return 'href="../../' + p1 + '"';
+                });
+            }
             headerPlaceholder.innerHTML = data;
             // Initialize after header loads
             setActiveNavLink();
@@ -81,7 +112,9 @@ function loadFooter() {
     //     ? '../../footer.html' 
     //     : 'footer.html';
 
-    const footerPath = 'footer.html';
+    const footerPath_temp = isPostPage() ? '../../footer.html' : 'footer.html';
+
+    const footerPath = BASE_PATH + footerPath_temp;
     
     fetch(footerPath)
         .then(response => {
@@ -91,6 +124,19 @@ function loadFooter() {
             return response.text();
         })
         .then(data => {
+            // If we're in a post, adjust the paths in the footer HTML
+            if (isPostPage()) {
+                // Fix image sources (including the logo)
+                data = data.replace(/src="img\//g, 'src="../../img/');
+                // Fix all HTML links (navigation links like index.html, about.html, etc.)
+                data = data.replace(/href="([^"]*\.html)"/g, function(match, p1) {
+                    // Don't modify external links or anchors
+                    if (p1.startsWith('http') || p1.startsWith('#')) {
+                        return match;
+                    }
+                    return 'href="../../' + p1 + '"';
+                });
+            }
             footerPlaceholder.innerHTML = data;
         })
         .catch(error => {
@@ -168,7 +214,7 @@ async function initMinimalSlider() {
     
     try {
         // Fetch posts data from JSON file
-        const response = await fetch('posts/posts.json');
+        const response = await fetch(BASE_PATH + 'posts/posts.json');
         if (!response.ok) {
             throw new Error('Failed to load posts data');
         }
@@ -318,7 +364,7 @@ async function loadPosts() {
   try {
     // Fetch posts data once
     if (allPosts.length === 0) {
-      const response = await fetch('posts/posts.json');
+      const response = await fetch(BASE_PATH + 'posts/posts.json');
       if (!response.ok) {
         throw new Error('Failed to load posts');
       }
@@ -585,7 +631,13 @@ function initContactFormValidation() {
 async function loadSiteVariables() {
     try {
       // Fetch the variables.json file
-      const response = await fetch('variables.json');
+
+
+      const siteVariables_temp = isPostPage() ? '../../variables.json' : 'variables.json';
+
+      const siteVariables = BASE_PATH + siteVariables_temp;
+
+      const response = await fetch(BASE_PATH + siteVariables);
       if (!response.ok) {
         throw new Error('Failed to load site variables');
       }
@@ -656,7 +708,7 @@ async function loadSiteVariables() {
     const postFolder = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
     
     // Fetch the markdown file
-    fetch(postFolder + 'content.md')
+    fetch(BASE_PATH + postFolder + 'content.md')
       .then(response => {
         if (!response.ok) {
           throw new Error('Failed to load markdown content: ' + response.status);
