@@ -633,11 +633,9 @@ async function loadSiteVariables() {
       // Fetch the variables.json file
 
 
-      const siteVariables_temp = isPostPage() ? '../../variables.json' : 'variables.json';
+      const variablesPath = isPostPage() ? '../../variables.json' : 'variables.json';
+      const response = await fetch(BASE_PATH + variablesPath);
 
-      const siteVariables = BASE_PATH + siteVariables_temp;
-
-      const response = await fetch(BASE_PATH + siteVariables);
       if (!response.ok) {
         throw new Error('Failed to load site variables');
       }
