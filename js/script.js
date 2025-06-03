@@ -59,16 +59,8 @@ function loadHeader() {
     const headerPlaceholder = document.getElementById('header-placeholder');
     if (!headerPlaceholder) return;
     
-    // Determine correct path based on location
-    // const headerPath = window.location.pathname.includes('/posts/') 
-    //     ? '../../header.html' 
-    //     : 'header.html';
-
-    const headerPath_temp = isPostPage() ? '../../header.html' : 'header.html';
-
-    const headerPath = BASE_PATH + headerPath_temp;
-
-    console.log("⮞ loadHeader() is about to fetch:", headerPath);
+    // For post pages, we need to go up two directories
+    const headerPath = isPostPage() ? '../../header.html' : 'header.html';
     
     fetch(headerPath)
         .then(response => {
@@ -109,16 +101,9 @@ function loadFooter() {
     const footerPlaceholder = document.getElementById('footer-placeholder');
     if (!footerPlaceholder) return;
     
-    // Determine correct path based on location
-    // const footerPath = window.location.pathname.includes('/posts/') 
-    //     ? '../../footer.html' 
-    //     : 'footer.html';
-
-    const footerPath_temp = isPostPage() ? '../../footer.html' : 'footer.html';
-
-    const footerPath = BASE_PATH + footerPath_temp;
-
-    console.log("⮞ loadHeader() is about to fetch:", footerPath);
+    // For post pages, we need to go up two directories
+    const footerPath = isPostPage() ? '../../footer.html' : 'footer.html';
+    
     fetch(footerPath)
         .then(response => {
             if (!response.ok) {
@@ -692,70 +677,68 @@ function initContactFormValidation() {
 
 async function loadSiteVariables() {
     try {
-      // Fetch the variables.json file
+        // For post pages, we need to go up two directories
+        const variablesPath = isPostPage() ? '../../variables.json' : 'variables.json';
+        const response = await fetch(variablesPath);
 
-
-      const variablesPath = isPostPage() ? '../../variables.json' : 'variables.json';
-      const response = await fetch(BASE_PATH + variablesPath);
-
-      if (!response.ok) {
-        throw new Error('Failed to load site variables');
-      }
-      
-      const variables = await response.json();
-      
-      // Find all elements with data-variable attribute
-      document.querySelectorAll('[data-variable]').forEach(element => {
-        const variableName = element.getAttribute('data-variable');
+        if (!response.ok) {
+            throw new Error('Failed to load site variables');
+        }
         
-        // Handle nested properties like "socialLinks.twitter"
-        if (variableName.includes('.')) {
-          const parts = variableName.split('.');
-          let value = variables;
-          for (const part of parts) {
-            if (value && value[part] !== undefined) {
-              value = value[part];
-            } else {
-              value = null;
-              break;
+        const variables = await response.json();
+        
+        // Find all elements with data-variable attribute
+        document.querySelectorAll('[data-variable]').forEach(element => {
+            const variableName = element.getAttribute('data-variable');
+            
+            // Handle nested properties like "socialLinks.twitter"
+            if (variableName.includes('.')) {
+                const parts = variableName.split('.');
+                let value = variables;
+                for (const part of parts) {
+                    if (value && value[part] !== undefined) {
+                        value = value[part];
+                    } else {
+                        value = null;
+                        break;
+                    }
+                }
+                if (value !== null) {
+                    element.textContent = value;
+                }
+            } 
+            // Handle simple properties
+            else if (variables[variableName] !== undefined) {
+                element.textContent = variables[variableName];
             }
-          }
-          if (value !== null) {
-            element.textContent = value;
-          }
-        } 
-        // Handle simple properties
-        else if (variables[variableName] !== undefined) {
-          element.textContent = variables[variableName];
-        }
-      });
-      
-      // Handle link href attributes
-      document.querySelectorAll('[data-variable-href]').forEach(element => {
-        const variableName = element.getAttribute('data-variable-href');
-        if (variableName.includes('.')) {
-          const parts = variableName.split('.');
-          let value = variables;
-          for (const part of parts) {
-            if (value && value[part] !== undefined) {
-              value = value[part];
-            } else {
-              value = null;
-              break;
+        });
+        
+        // Handle link href attributes
+        document.querySelectorAll('[data-variable-href]').forEach(element => {
+            const variableName = element.getAttribute('data-variable-href');
+            if (variableName.includes('.')) {
+                const parts = variableName.split('.');
+                let value = variables;
+                for (const part of parts) {
+                    if (value && value[part] !== undefined) {
+                        value = value[part];
+                    } else {
+                        value = null;
+                        break;
+                    }
+                }
+                if (value !== null) {
+                    element.href = value;
+                }
+            } else if (variables[variableName] !== undefined) {
+                element.href = variables[variableName];
             }
-          }
-          if (value !== null) {
-            element.href = value;
-          }
-        } else if (variables[variableName] !== undefined) {
-          element.href = variables[variableName];
-        }
-      });
-      
+        });
+        
     } catch (error) {
-      console.error('Error loading site variables:', error);
+        console.error('Error loading site variables:', error);
     }
-  }
+}
   
 
 
