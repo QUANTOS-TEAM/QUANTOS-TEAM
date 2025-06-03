@@ -66,6 +66,8 @@ function loadHeader() {
 
     const headerPath_temp = isPostPage() ? '../../header.html' : 'header.html';
 
+    console.log("Here: ", BASE_PATH);
+
     const headerPath = BASE_PATH + headerPath_temp;
     
     fetch(headerPath)
