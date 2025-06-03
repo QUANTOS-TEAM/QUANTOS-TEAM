@@ -1341,3 +1341,393 @@ footer {
 .custom-icon-color {
   color: #64C8EB;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ADDITIONAL MOBILE FIXES
+   Add these styles to the existing CSS file
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ===== Tablet Fixes (max-width: 992px) ===== */
+@media (max-width: 992px) {
+  /* Fix research topic cards for tablets */
+  .topic-card {
+    flex-direction: column;
+  }
+  
+  .topic-content {
+    padding-right: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .topic-image {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  /* Fix figure grid for tablets */
+  .figure-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===== Mobile Fixes (max-width: 768px) ===== */
+@media (max-width: 768px) {
+  /* Fix slider text/image overlap */
+  .minimal-slider {
+    height: auto;
+    min-height: 500px;
+  }
+  
+  .minimal-slide {
+    flex-direction: column;
+  }
+  
+  .minimal-slide-content,
+  .minimal-slide-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .minimal-slide-content {
+    padding: 20px;
+    min-height: 250px;
+  }
+  
+  .minimal-slide-image {
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 0 0 8px 8px;
+  }
+  
+  .minimal-slide-image img {
+    width: auto;
+    max-width: 90%;
+    height: auto;
+    max-height: 200px;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  
+  /* Fix slider buttons for mobile */
+  .minimal-slider-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+  
+  .minimal-prev {
+    left: 10px;
+  }
+  
+  .minimal-next {
+    right: 10px;
+  }
+  
+  /* Fix mission/vision grid */
+  .mission-vision-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+  
+  /* Fix team grid */
+  .team-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  /* Fix post meta layout */
+  .post-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  /* Fix lab header text */
+  .lab-header {
+    padding: 2rem 1rem;
+  }
+  
+  .lab-header h1 {
+    font-size: 2rem;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  .lab-header p {
+    font-size: 1rem;
+    padding: 0;
+  }
+  
+  /* Fix publication titles */
+  .publication-compact h4 {
+    font-size: 1rem;
+    word-wrap: break-word;
+  }
+  
+  /* Fix footer for mobile */
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .footer-logo {
+    justify-content: center;
+  }
+  
+  /* Fix about section figure */
+  .about-section figure {
+    width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .about-section figcaption {
+    font-size: 1rem !important;
+  }
+}
+
+/* ===== Small Mobile Fixes (max-width: 576px) ===== */
+@media (max-width: 576px) {
+  /* Fix hero section */
+  .hero {
+    padding: 2rem 0;
+  }
+  
+  .hero h1 {
+    font-size: 1.5rem;
+    line-height: 1.3;
+    word-wrap: break-word;
+    padding: 0 1rem;
+  }
+  
+  .hero p {
+    font-size: 0.9rem;
+    padding: 0 1rem;
+  }
+  
+  /* Fix main headings */
+  h1 {
+    font-size: 1.75rem;
+    line-height: 1.3;
+    word-wrap: break-word;
+  }
+  
+  h2 {
+    font-size: 1.4rem;
+    line-height: 1.3;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+    line-height: 1.3;
+  }
+  
+  /* Fix slider for small screens */
+  .minimal-slider {
+    min-height: 450px;
+  }
+  
+  .minimal-slide h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .minimal-slide p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  
+  .minimal-slide-content {
+    padding: 15px;
+    min-height: 200px;
+  }
+  
+  .minimal-slide-content .btn {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  
+  /* Fix posts grid */
+  .posts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .post-card {
+    margin: 0 1rem;
+  }
+  
+  /* Fix pagination */
+  .pagination {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .pagination-btn {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  
+  .page-numbers {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.5rem;
+  }
+  
+  /* Fix team member cards */
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .member-image {
+    width: 120px;
+    height: 120px;
+  }
+  
+  /* Fix research topic cards */
+  .topic-card {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+  }
+  
+  .topic-content {
+    min-width: unset;
+    padding: 0;
+  }
+  
+  .topic-image {
+    height: 200px;
+  }
+  
+  /* Fix post header */
+  .post-header {
+    height: 150px;
+  }
+  
+  .post-header-content {
+    padding: 1rem;
+  }
+  
+  .post-header-content h1 {
+    font-size: 1.5rem;
+  }
+  
+  /* Fix post author */
+  .post-author img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  /* Fix contact items */
+  .contact-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .contact-icon {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Fix buttons globally */
+  .btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+  
+  /* Fix mission/vision boxes */
+  .mission-box,
+  .vision-box {
+    padding: 1.5rem;
+  }
+  
+  /* Fix publications */
+  .publications-container h3 {
+    font-size: 1.3rem;
+  }
+  
+  .publication-compact {
+    padding: 0 0.5rem;
+  }
+  
+  .publication-compact h4 {
+    font-size: 0.95rem;
+  }
+  
+  .publication-compact p {
+    font-size: 0.85rem;
+  }
+  
+  /* Fix navigation menu */
+  nav ul li a {
+    padding: 0.75rem 0;
+    font-size: 1.1rem;
+  }
+  
+  /* Ensure containers have proper padding */
+  .container {
+    padding: 0 15px;
+  }
+  
+  /* Fix any overflow issues */
+  body {
+    overflow-x: hidden;
+  }
+  
+  /* Ensure all images are responsive */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* ===== Extra Small Mobile (max-width: 380px) ===== */
+@media (max-width: 380px) {
+  /* Further reduce font sizes for very small screens */
+  .hero h1 {
+    font-size: 1.3rem;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+  }
+  
+  h3 {
+    font-size: 1.1rem;
+  }
+  
+  .minimal-slide h3 {
+    font-size: 1.1rem;
+  }
+  
+  .minimal-slide p {
+    font-size: 0.85rem;
+  }
+  
+  /* Adjust slider height */
+  .minimal-slider {
+    min-height: 400px;
+  }
+  
+  .minimal-slide-content {
+    min-height: 180px;
+  }
+  
+  .minimal-slide-image {
+    height: 200px;
+  }
+  
+  /* Ensure proper text wrapping */
+  * {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+}
