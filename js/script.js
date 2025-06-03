@@ -226,14 +226,24 @@ function initMobileNav() {
     
     if (!mobileMenuToggle || !nav) return;
     
+    // 1) Click handler (unchanged)
     mobileMenuToggle.addEventListener('click', function() {
         nav.classList.toggle('active');
         
-        // Toggle between menu and close icons
+        // Toggle between menu (☰) and close (✕) icons
         this.innerHTML = this.innerHTML === '☰' ? '✕' : '☰';
     });
     
-    // Close mobile menu when clicking on a link
+    // 2) Keydown handler so Enter/Space also toggles
+    mobileMenuToggle.addEventListener('keydown', function(e) {
+        // Check for Enter or Space key
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();              // Prevent page from scrolling on Space
+            this.click();                    // Reuse the click‐handler logic
+        }
+    });
+    
+    // 3) Close mobile menu when clicking on any nav link (unchanged)
     const navLinks = document.querySelectorAll('nav ul li a');
     navLinks.forEach(link => {
         link.addEventListener('click', function() {

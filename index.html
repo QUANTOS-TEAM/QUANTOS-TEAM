@@ -20,7 +20,7 @@
     <div id="header-placeholder"></div>
 
     <!-- Main Content -->
-    <main>
+    <main aria-label="Main Content">
         <!-- Hero Section -->
         <section class="hero">
             <div class="container">
@@ -57,39 +57,21 @@
                 <button class="filter-btn active" data-filter="all">All Posts</button>
                 <button class="filter-btn" data-filter="news">News</button>
                 <button class="filter-btn" data-filter="tutorial">Tutorials</button>
-                <!-- <button class="filter-btn" data-filter="lab4">Lab 4</button> -->
             </div>
             
             <!-- Posts Container - Will be populated dynamically from JSON -->
             <div id="posts-container" class="posts-grid">
-                <!-- Fallback static posts in case JavaScript is disabled -->
-                <!-- Post 1 -->
-                <!-- <div class="post-card" data-lab="lab1">
-                    <div class="post-image">
-                        <img src="posts/post1/thumbnail.jpg" alt="Data processing research">
-                    </div>
-                    
-                </div> -->
-                
-                <!-- These static posts will be replaced by JavaScript if it's enabled -->
             </div>
-            
-            <!-- <div class="text-center" style="margin-top: 2rem; text-align: center;">
-                <a href="#" class="btn">Load More</a>
-            </div> -->
+        
 
-            <div class="pagination">
-                <button id="prev-page" class="pagination-btn" disabled>&laquo; Previous</button>
+            <div class="pagination" aria-label="Post navigation">
+                <button id="prev-page" class="pagination-btn" disabled aria-label="Previous page">&laquo; Previous</button>
                 <div id="page-numbers" class="page-numbers">
-                  <span class="current-page">1</span>
+                <span class="current-page">1</span>
                 </div>
-                <button id="next-page" class="pagination-btn">Next &raquo;</button>
+                <button id="next-page" class="pagination-btn" aria-label="Next page">Next &raquo;</button>
             </div>
         </section>
-
-
-
-        
 
         <!-- Lab Introduction -->
         <section class="container">
@@ -101,7 +83,7 @@
                     <a href="paraxial_fluids_of_light.html" class="btn">Learn More</a>
                 </div>
                 
-                <div class="vision-box">
+                <div class="mission-box">
                     <h3>Quantum Imaging and Sensing </h3>
                     <p>Focused on exploring single photon sources and their application for quantum imaging and quantum sensing.</p>
                     <a href="quantum_imaging.html" class="btn">Learn More</a>
@@ -113,7 +95,7 @@
                     <a href="optical_computing.html" class="btn">Learn More</a>
                 </div>
                 
-                <div class="vision-box">
+                <div class="mission-box">
                     <h3>Spectral Imaging </h3>
                     <p>Focused on using LIBS and XRF imaging for industrial applications</p>
                     <a href="spectral_imaging.html" class="btn">Learn More</a>
