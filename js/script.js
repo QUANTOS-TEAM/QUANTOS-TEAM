@@ -67,6 +67,8 @@ function loadHeader() {
     const headerPath_temp = isPostPage() ? '../../header.html' : 'header.html';
 
     const headerPath = BASE_PATH + headerPath_temp;
+
+    console.log("⮞ loadHeader() is about to fetch:", headerPath);
     
     fetch(headerPath)
         .then(response => {
@@ -116,7 +118,7 @@ function loadFooter() {
 
     const footerPath = BASE_PATH + footerPath_temp;
 
-    
+    console.log("⮞ loadHeader() is about to fetch:", footerPath);
     fetch(footerPath)
         .then(response => {
             if (!response.ok) {
