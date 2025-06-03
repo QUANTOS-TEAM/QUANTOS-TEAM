@@ -64,10 +64,7 @@ function loadHeader() {
     //     ? '../../header.html' 
     //     : 'header.html';
 
-    // const headerPath_temp = isPostPage() ? '../../header.html' : 'header.html';
-    const headerPath_temp = 'header.html';
-
-    console.log("Here: ", BASE_PATH);
+    const headerPath_temp = isPostPage() ? '../../header.html' : 'header.html';
 
     const headerPath = BASE_PATH + headerPath_temp;
     
@@ -118,6 +115,7 @@ function loadFooter() {
     const footerPath_temp = isPostPage() ? '../../footer.html' : 'footer.html';
 
     const footerPath = BASE_PATH + footerPath_temp;
+
     
     fetch(footerPath)
         .then(response => {
