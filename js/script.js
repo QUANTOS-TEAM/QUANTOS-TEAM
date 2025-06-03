@@ -4,14 +4,16 @@
  * 
  * Table of Contents:
  * 1. Constants & Configuration
- * 2. Utility Functions
- * 3. Header & Footer Management
- * 4. Navigation Functions
- * 5. Slider/Carousel Functions
- * 6. Posts & Filtering
- * 7. Form Validation
- * 8. Content Loading
- * 9. Initialization
+ * 2. State Management
+ * 3. Utility Functions
+ * 4. Header & Footer Management
+ * 5. Navigation Functions
+ * 6. Dark Mode Functions
+ * 7. Slider/Carousel Functions
+ * 8. Posts & Filtering Functions
+ * 9. Pagination Functions
+ * 10. Content Loading Functions
+ * 11. Initialization
  * ═══════════════════════════════════════════════════════════════════════════
  */
 
@@ -23,57 +25,110 @@ const CONFIG = {
     POSTS_PER_PAGE: 12,
     SLIDER_INTERVAL: 5000,
     ANIMATION_DURATION: 300,
-    MOBILE_BREAKPOINT: 768
+    MOBILE_BREAKPOINT: 768,
+    DARK_MODE_CHECK_INTERVAL: 100
 };
 
 const SELECTORS = {
+    // Layout
     HEADER_PLACEHOLDER: '#header-placeholder',
     FOOTER_PLACEHOLDER: '#footer-placeholder',
+    
+    // Dark mode
+    DARK_MODE_TOGGLE: '#dark-mode-toggle',
+    
+    // Posts
     POSTS_CONTAINER: '#posts-container',
     POST_CONTENT: '.post-content',
     NEWS_FILTER: '.news-filter',
+    FILTER_BTN: '.filter-btn',
+    
+    // Forms
     CONTACT_FORM: '#contactForm',
+    ERROR_MESSAGE: '.error-message',
+    
+    // Slider
     SLIDER: {
         CONTAINER: '#minimal-slides-container',
         DOTS: '#minimal-slider-dots',
         PREV: '#minimal-prev',
-        NEXT: '#minimal-next'
+        NEXT: '#minimal-next',
+        DOT: '.minimal-dot',
+        SLIDE: '.minimal-slide'
     },
+    
+    // Pagination
     PAGINATION: {
         PREV: '#prev-page',
         NEXT: '#next-page',
-        NUMBERS: '#page-numbers'
-    }
+        NUMBERS: '#page-numbers',
+        LINKS: '.page-numbers a'
+    },
+    
+    // Navigation
+    NAV: 'nav',
+    NAV_LINKS: 'nav ul li a',
+    MOBILE_TOGGLE: '.mobile-menu-toggle',
+    
+    // Data attributes
+    DATA_VARIABLE: '[data-variable]',
+    DATA_VARIABLE_HREF: '[data-variable-href]'
 };
 
-// State management
+// ═══════════════════════════════════════════════════════════════════════════
+// 2. STATE MANAGEMENT
+// ═══════════════════════════════════════════════════════════════════════════
+
 const STATE = {
+    // Posts
     currentPage: 1,
     allPosts: [],
     filteredPosts: [],
     currentFilter: 'all',
+    
+    // Slider
     sliderIndex: 0,
-    sliderInterval: null
+    sliderInterval: null,
+    
+    // System
+    basePath: null
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 2. UTILITY FUNCTIONS
+// 3. UTILITY FUNCTIONS
 // ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Safely queries DOM element
+ * @param {string} selector - CSS selector
+ * @returns {Element|null} DOM element or null
+ */
+const getElement = (selector) => document.querySelector(selector);
+
+/**
+ * Safely queries all matching DOM elements
+ * @param {string} selector - CSS selector
+ * @returns {NodeList} List of matching elements
+ */
+const getElements = (selector) => document.querySelectorAll(selector);
 
 /**
  * Determines the base path for the site (handles GitHub Pages subdirectories)
  * @returns {string} Base path with trailing slash or empty string
  */
 const getBasePath = () => {
+    if (STATE.basePath !== null) return STATE.basePath;
+    
     const pathArray = window.location.pathname.split('/');
     const hasSubdirectory = pathArray.length > 2 && 
                            pathArray[1] !== '' && 
                            !pathArray[1].includes('.html');
     
-    if (hasSubdirectory && window.location.hostname.includes('github.io')) {
-        return `/${pathArray[1]}/`;
-    }
-    return '';
+    STATE.basePath = (hasSubdirectory && window.location.hostname.includes('github.io')) 
+        ? `/${pathArray[1]}/` 
+        : '';
+    
+    return STATE.basePath;
 };
 
 /**
@@ -93,24 +148,39 @@ const isValidEmail = (email) => {
 };
 
 /**
- * Safely queries DOM element
- * @param {string} selector - CSS selector
- * @returns {Element|null} DOM element or null
+ * Scrolls to a specific section smoothly
+ * @param {string} selector - CSS selector for target section
  */
-const getElement = (selector) => document.querySelector(selector);
+const scrollToSection = (selector) => {
+    const section = getElement(selector);
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+};
 
 /**
- * Safely queries all matching DOM elements
- * @param {string} selector - CSS selector
- * @returns {NodeList} List of matching elements
+ * Gets nested object value using dot notation
+ * @param {Object} obj - Object to search
+ * @param {string} path - Dot-separated path
+ * @returns {*} Value at path or null
  */
-const getElements = (selector) => document.querySelectorAll(selector);
-
-// Cache base path
-const BASE_PATH = getBasePath();
+const getNestedValue = (obj, path) => {
+    const parts = path.split('.');
+    let value = obj;
+    
+    for (const part of parts) {
+        if (value && value[part] !== undefined) {
+            value = value[part];
+        } else {
+            return null;
+        }
+    }
+    
+    return value;
+};
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 3. HEADER & FOOTER MANAGEMENT
+// 4. HEADER & FOOTER MANAGEMENT
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -156,6 +226,8 @@ async function loadHeader() {
         // Initialize header-dependent features
         setActiveNavLink();
         initMobileNav();
+        initDarkModeToggle();
+        
     } catch (error) {
         console.error('Error loading header:', error);
         placeholder.innerHTML = '<header><div class="container"><div class="logo">QUANTOS</div></div></header>';
@@ -179,6 +251,7 @@ async function loadFooter() {
         html = adjustPathsForPosts(html);
         
         placeholder.innerHTML = html;
+        
     } catch (error) {
         console.error('Error loading footer:', error);
         placeholder.innerHTML = '<footer><div class="container"><p>© 2025 QUANTOS Research Team</p></div></footer>';
@@ -186,7 +259,7 @@ async function loadFooter() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 4. NAVIGATION FUNCTIONS
+// 5. NAVIGATION FUNCTIONS
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -194,7 +267,7 @@ async function loadFooter() {
  */
 function setActiveNavLink() {
     const currentPath = window.location.pathname;
-    const navLinks = getElements('nav ul li a');
+    const navLinks = getElements(SELECTORS.NAV_LINKS);
     
     navLinks.forEach(link => {
         link.classList.remove('active');
@@ -210,7 +283,6 @@ function setActiveNavLink() {
         let shouldBeActive = false;
         
         if (isPostPage()) {
-            // Highlight home for all post pages
             shouldBeActive = href === 'index.html';
         } else {
             const currentPageName = currentPath.split('/').pop();
@@ -228,8 +300,8 @@ function setActiveNavLink() {
  * Initializes mobile navigation menu
  */
 function initMobileNav() {
-    const toggle = getElement('.mobile-menu-toggle');
-    const nav = getElement('nav');
+    const toggle = getElement(SELECTORS.MOBILE_TOGGLE);
+    const nav = getElement(SELECTORS.NAV);
     
     if (!toggle || !nav) return;
     
@@ -248,7 +320,7 @@ function initMobileNav() {
     });
     
     // Close menu when clicking nav links on mobile
-    const navLinks = getElements('nav ul li a');
+    const navLinks = getElements(SELECTORS.NAV_LINKS);
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
             if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
@@ -260,7 +332,38 @@ function initMobileNav() {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 5. SLIDER/CAROUSEL FUNCTIONS
+// 6. DARK MODE FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Initializes dark mode based on saved preference
+ */
+function initDarkMode() {
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    
+    if (currentTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+}
+
+/**
+ * Initializes dark mode toggle button
+ */
+function initDarkModeToggle() {
+    const darkModeToggle = getElement(SELECTORS.DARK_MODE_TOGGLE);
+    
+    if (darkModeToggle) {
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+        });
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 7. SLIDER/CAROUSEL FUNCTIONS
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -293,7 +396,7 @@ function createSlide(post) {
  */
 function goToSlide(index) {
     const container = getElement(SELECTORS.SLIDER.CONTAINER);
-    const dots = getElements('.minimal-dot');
+    const dots = getElements(SELECTORS.SLIDER.DOT);
     
     if (!container) return;
     
@@ -312,7 +415,7 @@ function goToSlide(index) {
 function startSliderAutoPlay() {
     stopSliderAutoPlay();
     STATE.sliderInterval = setInterval(() => {
-        const slides = getElements('.minimal-slide');
+        const slides = getElements(SELECTORS.SLIDER.SLIDE);
         if (slides.length > 0) {
             const nextIndex = (STATE.sliderIndex + 1) % slides.length;
             goToSlide(nextIndex);
@@ -331,6 +434,36 @@ function stopSliderAutoPlay() {
 }
 
 /**
+ * Sets up slider control event listeners
+ */
+function setupSliderControls() {
+    // Dot navigation
+    const dots = getElements(SELECTORS.SLIDER.DOT);
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => goToSlide(index));
+    });
+    
+    // Button navigation
+    const prevBtn = getElement(SELECTORS.SLIDER.PREV);
+    const nextBtn = getElement(SELECTORS.SLIDER.NEXT);
+    const slides = getElements(SELECTORS.SLIDER.SLIDE);
+    
+    if (prevBtn && slides.length > 0) {
+        prevBtn.addEventListener('click', () => {
+            const newIndex = (STATE.sliderIndex - 1 + slides.length) % slides.length;
+            goToSlide(newIndex);
+        });
+    }
+    
+    if (nextBtn && slides.length > 0) {
+        nextBtn.addEventListener('click', () => {
+            const newIndex = (STATE.sliderIndex + 1) % slides.length;
+            goToSlide(newIndex);
+        });
+    }
+}
+
+/**
  * Initializes the highlights slider
  */
 async function initMinimalSlider() {
@@ -344,7 +477,7 @@ async function initMinimalSlider() {
     dotsContainer.innerHTML = '';
     
     try {
-        const response = await fetch(BASE_PATH + 'posts/posts.json');
+        const response = await fetch(getBasePath() + 'posts/posts.json');
         if (!response.ok) throw new Error('Failed to load posts');
         
         const posts = await response.json();
@@ -365,10 +498,8 @@ async function initMinimalSlider() {
         
         // Create slides and dots
         highlights.forEach((post, index) => {
-            // Add slide
             container.appendChild(createSlide(post));
             
-            // Add dot
             const dot = document.createElement('div');
             dot.className = 'minimal-dot';
             dot.dataset.index = index;
@@ -376,10 +507,8 @@ async function initMinimalSlider() {
             dotsContainer.appendChild(dot);
         });
         
-        // Initialize controls
+        // Initialize controls and autoplay
         setupSliderControls();
-        
-        // Start autoplay
         startSliderAutoPlay();
         
         // Pause on hover
@@ -400,38 +529,8 @@ async function initMinimalSlider() {
     }
 }
 
-/**
- * Sets up slider control event listeners
- */
-function setupSliderControls() {
-    // Dot navigation
-    const dots = getElements('.minimal-dot');
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => goToSlide(index));
-    });
-    
-    // Button navigation
-    const prevBtn = getElement(SELECTORS.SLIDER.PREV);
-    const nextBtn = getElement(SELECTORS.SLIDER.NEXT);
-    const slides = getElements('.minimal-slide');
-    
-    if (prevBtn && slides.length > 0) {
-        prevBtn.addEventListener('click', () => {
-            const newIndex = (STATE.sliderIndex - 1 + slides.length) % slides.length;
-            goToSlide(newIndex);
-        });
-    }
-    
-    if (nextBtn && slides.length > 0) {
-        nextBtn.addEventListener('click', () => {
-            const newIndex = (STATE.sliderIndex + 1) % slides.length;
-            goToSlide(newIndex);
-        });
-    }
-}
-
 // ═══════════════════════════════════════════════════════════════════════════
-// 6. POSTS & FILTERING
+// 8. POSTS & FILTERING FUNCTIONS
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -457,32 +556,6 @@ function createPostCard(post) {
 }
 
 /**
- * Loads all posts from JSON file
- */
-async function loadPosts() {
-    const container = getElement(SELECTORS.POSTS_CONTAINER);
-    if (!container) return;
-    
-    try {
-        if (STATE.allPosts.length === 0) {
-            const response = await fetch(BASE_PATH + 'posts/posts.json');
-            if (!response.ok) throw new Error('Failed to load posts');
-            
-            STATE.allPosts = await response.json();
-            STATE.filteredPosts = [...STATE.allPosts];
-        }
-        
-        displayPostsPage(STATE.currentPage);
-        updatePaginationControls();
-        initPostFiltering();
-        
-    } catch (error) {
-        console.error('Error loading posts:', error);
-        container.innerHTML = '<p>Failed to load posts. Please try again later.</p>';
-    }
-}
-
-/**
  * Displays posts for current page
  * @param {number} page - Page number to display
  */
@@ -503,34 +576,74 @@ function displayPostsPage(page) {
 }
 
 /**
- * Updates pagination controls based on current state
+ * Applies filter to posts
+ * @param {string} filter - Filter value to apply
  */
-function updatePaginationControls() {
-    const totalPages = Math.ceil(STATE.filteredPosts.length / CONFIG.POSTS_PER_PAGE);
-    const prevButton = getElement(SELECTORS.PAGINATION.PREV);
-    const nextButton = getElement(SELECTORS.PAGINATION.NEXT);
-    const pageNumbers = getElement(SELECTORS.PAGINATION.NUMBERS);
+function applyFilter(filter) {
+    if (filter === 'all') {
+        STATE.filteredPosts = [...STATE.allPosts];
+    } else {
+        STATE.filteredPosts = STATE.allPosts.filter(post => 
+            post.tags?.includes(filter)
+        );
+    }
+}
+
+/**
+ * Initializes post filtering functionality
+ */
+function initPostFiltering() {
+    const filterButtons = getElements(SELECTORS.FILTER_BTN);
     
-    if (!prevButton || !nextButton || !pageNumbers) return;
-    
-    // Update button states
-    prevButton.disabled = STATE.currentPage === 1;
-    nextButton.disabled = STATE.currentPage === totalPages || totalPages === 0;
-    
-    // Generate page numbers
-    pageNumbers.innerHTML = generatePageNumbers(totalPages);
-    
-    // Add click handlers to page links
-    getElements('.page-numbers a').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            STATE.currentPage = parseInt(this.dataset.page);
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            
+            // Update active state
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Apply filter
+            STATE.currentFilter = filter;
+            applyFilter(filter);
+            
+            // Reset to first page
+            STATE.currentPage = 1;
             displayPostsPage(STATE.currentPage);
             updatePaginationControls();
-            scrollToSection('.news-feed');
         });
     });
 }
+
+/**
+ * Loads all posts from JSON file
+ */
+async function loadPosts() {
+    const container = getElement(SELECTORS.POSTS_CONTAINER);
+    if (!container) return;
+    
+    try {
+        if (STATE.allPosts.length === 0) {
+            const response = await fetch(getBasePath() + 'posts/posts.json');
+            if (!response.ok) throw new Error('Failed to load posts');
+            
+            STATE.allPosts = await response.json();
+            STATE.filteredPosts = [...STATE.allPosts];
+        }
+        
+        displayPostsPage(STATE.currentPage);
+        updatePaginationControls();
+        initPostFiltering();
+        
+    } catch (error) {
+        console.error('Error loading posts:', error);
+        container.innerHTML = '<p>Failed to load posts. Please try again later.</p>';
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 9. PAGINATION FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
 
 /**
  * Generates pagination number links HTML
@@ -576,117 +689,69 @@ function generatePageNumbers(totalPages) {
 }
 
 /**
- * Initializes post filtering functionality
+ * Updates pagination controls based on current state
  */
-function initPostFiltering() {
-    const filterButtons = getElements('.filter-btn');
+function updatePaginationControls() {
+    const totalPages = Math.ceil(STATE.filteredPosts.length / CONFIG.POSTS_PER_PAGE);
+    const prevButton = getElement(SELECTORS.PAGINATION.PREV);
+    const nextButton = getElement(SELECTORS.PAGINATION.NEXT);
+    const pageNumbers = getElement(SELECTORS.PAGINATION.NUMBERS);
     
-    filterButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const filter = this.dataset.filter;
-            
-            // Update active state
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Apply filter
-            STATE.currentFilter = filter;
-            applyFilter(filter);
-            
-            // Reset to first page
-            STATE.currentPage = 1;
+    if (!prevButton || !nextButton || !pageNumbers) return;
+    
+    // Update button states
+    prevButton.disabled = STATE.currentPage === 1;
+    nextButton.disabled = STATE.currentPage === totalPages || totalPages === 0;
+    
+    // Generate page numbers
+    pageNumbers.innerHTML = generatePageNumbers(totalPages);
+    
+    // Add click handlers to page links
+    getElements(SELECTORS.PAGINATION.LINKS).forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            STATE.currentPage = parseInt(this.dataset.page);
             displayPostsPage(STATE.currentPage);
             updatePaginationControls();
+            scrollToSection('.news-feed');
         });
     });
 }
 
 /**
- * Applies filter to posts
- * @param {string} filter - Filter value to apply
+ * Sets up pagination button event listeners
  */
-function applyFilter(filter) {
-    if (filter === 'all') {
-        STATE.filteredPosts = [...STATE.allPosts];
-    } else {
-        STATE.filteredPosts = STATE.allPosts.filter(post => 
-            post.tags?.includes(filter)
-        );
-    }
-}
-
-/**
- * Scrolls to a specific section smoothly
- * @param {string} selector - CSS selector for target section
- */
-function scrollToSection(selector) {
-    const section = getElement(selector);
-    if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// 7. FORM VALIDATION
-// ═══════════════════════════════════════════════════════════════════════════
-
-/**
- * Shows validation error message
- * @param {HTMLElement} input - Input element with error
- * @param {string} message - Error message to display
- */
-function showError(input, message) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'error-message';
-    errorDiv.style.cssText = 'color: #0091BE; font-size: 0.8rem; margin-top: 5px;';
-    errorDiv.textContent = message;
+function initPaginationButtons() {
+    const prevButton = getElement(SELECTORS.PAGINATION.PREV);
+    const nextButton = getElement(SELECTORS.PAGINATION.NEXT);
     
-    input.parentElement.appendChild(errorDiv);
-}
-
-/**
- * Initializes contact form validation
- */
-function initContactFormValidation() {
-    const form = getElement(SELECTORS.CONTACT_FORM);
-    if (!form) return;
-    
-    form.addEventListener('submit', function(event) {
-        let isValid = true;
-        
-        // Clear previous errors
-        getElements('.error-message').forEach(el => el.remove());
-        
-        // Validate fields
-        const fields = {
-            name: { element: getElement('#name'), message: 'Name is required' },
-            email: { element: getElement('#email'), message: 'Valid email is required' },
-            message: { element: getElement('#message'), message: 'Message is required' }
-        };
-        
-        // Check each field
-        Object.entries(fields).forEach(([key, field]) => {
-            if (!field.element) return;
-            
-            const value = field.element.value.trim();
-            
-            if (!value) {
-                showError(field.element, field.message);
-                isValid = false;
-            } else if (key === 'email' && !isValidEmail(value)) {
-                showError(field.element, 'Please enter a valid email');
-                isValid = false;
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            if (STATE.currentPage > 1) {
+                STATE.currentPage--;
+                displayPostsPage(STATE.currentPage);
+                updatePaginationControls();
+                scrollToSection('.news-feed');
             }
         });
-        
-        if (!isValid) {
-            event.preventDefault();
-        }
-    });
+    }
+    
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            const totalPages = Math.ceil(STATE.filteredPosts.length / CONFIG.POSTS_PER_PAGE);
+            if (STATE.currentPage < totalPages) {
+                STATE.currentPage++;
+                displayPostsPage(STATE.currentPage);
+                updatePaginationControls();
+                scrollToSection('.news-feed');
+            }
+        });
+    }
 }
 
+
 // ═══════════════════════════════════════════════════════════════════════════
-// 8. CONTENT LOADING
+// 10. CONTENT LOADING FUNCTIONS
 // ═══════════════════════════════════════════════════════════════════════════
 
 /**
@@ -700,8 +765,6 @@ async function loadSiteVariables() {
         if (!response.ok) throw new Error('Failed to load variables');
         
         const variables = await response.json();
-        
-        // Apply variables to elements
         applyVariables(variables);
         
     } catch (error) {
@@ -715,7 +778,7 @@ async function loadSiteVariables() {
  */
 function applyVariables(variables) {
     // Handle text content
-    getElements('[data-variable]').forEach(element => {
+    getElements(SELECTORS.DATA_VARIABLE).forEach(element => {
         const variableName = element.getAttribute('data-variable');
         const value = getNestedValue(variables, variableName);
         
@@ -725,7 +788,7 @@ function applyVariables(variables) {
     });
     
     // Handle href attributes
-    getElements('[data-variable-href]').forEach(element => {
+    getElements(SELECTORS.DATA_VARIABLE_HREF).forEach(element => {
         const variableName = element.getAttribute('data-variable-href');
         const value = getNestedValue(variables, variableName);
         
@@ -733,27 +796,6 @@ function applyVariables(variables) {
             element.href = value;
         }
     });
-}
-
-/**
- * Gets nested object value using dot notation
- * @param {Object} obj - Object to search
- * @param {string} path - Dot-separated path
- * @returns {*} Value at path or null
- */
-function getNestedValue(obj, path) {
-    const parts = path.split('.');
-    let value = obj;
-    
-    for (const part of parts) {
-        if (value && value[part] !== undefined) {
-            value = value[part];
-        } else {
-            return null;
-        }
-    }
-    
-    return value;
 }
 
 /**
@@ -784,8 +826,6 @@ async function loadMarkdownContent() {
         if (!markdownResponse.ok) throw new Error('Failed to load markdown');
         
         const markdown = await markdownResponse.text();
-        
-        // Process and render markdown
         renderMarkdown(postContent, markdown);
         
     } catch (error) {
@@ -823,44 +863,16 @@ function renderMarkdown(container, markdown) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// 9. INITIALIZATION
+// 11. INITIALIZATION
 // ═══════════════════════════════════════════════════════════════════════════
-
-/**
- * Sets up pagination button event listeners
- */
-function initPaginationButtons() {
-    const prevButton = getElement(SELECTORS.PAGINATION.PREV);
-    const nextButton = getElement(SELECTORS.PAGINATION.NEXT);
-    
-    if (prevButton) {
-        prevButton.addEventListener('click', () => {
-            if (STATE.currentPage > 1) {
-                STATE.currentPage--;
-                displayPostsPage(STATE.currentPage);
-                updatePaginationControls();
-                scrollToSection('.news-feed');
-            }
-        });
-    }
-    
-    if (nextButton) {
-        nextButton.addEventListener('click', () => {
-            const totalPages = Math.ceil(STATE.filteredPosts.length / CONFIG.POSTS_PER_PAGE);
-            if (STATE.currentPage < totalPages) {
-                STATE.currentPage++;
-                displayPostsPage(STATE.currentPage);
-                updatePaginationControls();
-                scrollToSection('.news-feed');
-            }
-        });
-    }
-}
 
 /**
  * Main initialization function
  */
 function init() {
+    // Initialize dark mode immediately
+    initDarkMode();
+    
     // Load page components
     loadHeader();
     loadFooter();

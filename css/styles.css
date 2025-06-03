@@ -2,31 +2,32 @@
    QUANTOS Research Team - Main Stylesheet
    
    Table of Contents:
-   1. Color Scheme
-   2. Global Text Justification
-   3. Reset and Base Styles
-   4. Typography
+   1. Color Scheme & Variables
+   2. Reset and Base Styles
+   3. Typography
+   4. Global Text Justification
    5. Buttons
    6. Header & Navigation
-   7. Main Content & Layout
-   8. Hero Section
-   9. Highlights Slider
-   10. News Feed & Posts Grid
-   11. Post Page Styles
-   12. Pagination
-   13. Laboratory/Research Pages
-   14. Team Section
-   15. Publications
-   16. About Page
-   17. Contact Page
-   18. Footer
-   19. Additional Components
-   20. Responsive Design
-   21. Utility Classes & Miscellaneous
+   7. Dark Mode Toggle
+   8. Main Content & Layout
+   9. Hero Section
+   10. Highlights Slider
+   11. News Feed & Posts Grid
+   12. Post Page Styles
+   13. Pagination
+   14. Laboratory/Research Pages
+   15. Team Section
+   16. Publications
+   17. About Page
+   18. Contact Page
+   19. Footer
+   20. Dark Mode Styles
+   21. Responsive Design
+   22. Utility Classes
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   1. COLOR SCHEME
+   1. COLOR SCHEME & VARIABLES
    ═══════════════════════════════════════════════════════════════════════════ */
 /* 
    Color Scheme:
@@ -35,57 +36,14 @@
    Dark: #000000 (black)
    Background: #FFFFFF (white)
    Text: #000000 (black)
+   Gray: #f0f0f0 (light gray)
+   Medium Gray: #666666
+   Border Gray: #e0e0e0
 */
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   2. GLOBAL TEXT JUSTIFICATION
+   2. RESET AND BASE STYLES
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ──────────────────────────────────────────────────────────
-   Global: force all text to be justified 
-   ────────────────────────────────────────────────────────── */
-html, 
-body, 
-/* h1, 
-h2, 
-h3, 
-h4, 
-h5, 
-h6,  */
-p, 
-li, 
-a, 
-span, 
-blockquote, 
-figcaption, 
-.btn
-/* add any other text‐bearing elements you use */ 
-/* .topic-content, 
-.publication-compact, 
-.contact-item, 
-.about-text, 
-.lab-overview, 
-.lab-header */
-/* .hero, 
-.mission-box, 
-.vision-box  */
-{
-  text-align: justify;
-}
-
-.team-member .member-name,
-.team-member .member-role {
-  text-align: center;
-}
-
-/* Optionally prevent very short lines from forcing large gaps: */
-body {
-  text-justify: inter-word; /* gives better hyphenation/word-spacing */
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   3. RESET AND BASE STYLES
-   ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Reset and Base Styles ===== */
 * {
   margin: 0;
   padding: 0;
@@ -97,6 +55,7 @@ body {
   line-height: 1.6;
   color: #000000;
   background-color: #FFFFFF;
+  text-justify: inter-word;
 }
 
 .container {
@@ -106,27 +65,23 @@ body {
   padding: 0 20px;
 }
 
+img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
-   4. TYPOGRAPHY
+   3. TYPOGRAPHY
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Typography ===== */
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 1rem;
   font-weight: 600;
   line-height: 1.2;
 }
 
-h1 {
-  font-size: 2.5rem;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.75rem;
-}
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
 
 p {
   margin-bottom: 1rem;
@@ -143,9 +98,21 @@ a:hover {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   4. GLOBAL TEXT JUSTIFICATION
+   ═══════════════════════════════════════════════════════════════════════════ */
+html, body, p, li, a, span, blockquote, figcaption, .btn {
+  text-align: justify;
+}
+
+/* Center-aligned exceptions */
+.team-member .member-name,
+.team-member .member-role {
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    5. BUTTONS
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Button Styles ===== */
 .btn {
   display: inline-block;
   padding: 10px 20px;
@@ -187,10 +154,21 @@ a:hover {
   color: white;
 }
 
+/* Special button sizing for sliders */
+.highlight-content .btn,
+.minimal-slide-content .btn,
+.slide-content .btn {
+  display: inline-block;
+  width: auto !important;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  max-width: fit-content;
+  text-align: center;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    6. HEADER & NAVIGATION
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Header & Navigation ===== */
 header {
   background-color: white;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -209,27 +187,50 @@ header {
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: 700;
   display: flex;
   align-items: center;
+  gap: 15px;
+  font-size: 1.5rem;
+  font-weight: 700;
 }
 
 .logo img {
   height: 50px;
-  margin-right: 10px;
+  width: auto;
+  display: block;
+  margin: 0;
+}
+
+.logo-home-link {
+  display: inline-flex;
+  align-items: center;
+  color: inherit;
+  text-decoration: none;
+  line-height: 1;
+  font-size: 1.5rem;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 nav ul {
   list-style: none;
   display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
 nav ul li {
+  display: flex;
+  align-items: center;
+  height: 40px;
   margin-left: 1.5rem;
 }
 
 nav ul li a {
+  display: flex;
+  align-items: center;
+  height: 100%;
   color: #000000;
   font-weight: 600;
   padding: 5px 0;
@@ -263,19 +264,42 @@ nav ul li a.active {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   7. MAIN CONTENT & LAYOUT
+   7. DARK MODE TOGGLE
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Main Content ===== */
+.dark-mode-btn {
+  background: none;
+  border: 2px solid #0091BE;
+  color: #0091BE;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+  margin: 0;
+  vertical-align: middle;
+}
+
+.dark-mode-btn:hover {
+  background-color: #0091BE;
+  color: white;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   8. MAIN CONTENT & LAYOUT
+   ═══════════════════════════════════════════════════════════════════════════ */
 main {
-  margin-top: 80px; /* Height of the fixed header */
-  min-height: calc(100vh - 80px - 100px); /* Full height minus header and footer */
+  margin-top: 80px;
+  min-height: calc(100vh - 80px - 100px);
   padding: 2rem 0;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   8. HERO SECTION
+   9. HERO SECTION
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Hero Section ===== */
 .hero {
   background-color: #000000;
   color: white;
@@ -296,9 +320,8 @@ main {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   9. HIGHLIGHTS SLIDER
+   10. HIGHLIGHTS SLIDER
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Highlights Slider ===== */
 .minimal-slider {
   position: relative;
   width: 100%;
@@ -336,8 +359,7 @@ main {
   width: 50%;
   overflow: hidden;
   border-radius: 12px;
-  justify-content: center; /* Center the image in its container */
-  /* padding: 5px; */
+  justify-content: center;
 }
 
 .minimal-slide-image img {
@@ -346,6 +368,10 @@ main {
   object-fit: contain;
   border-radius: 12px;
   transition: transform 0.3s ease; 
+}
+
+.minimal-slide-image:hover img {
+  transform: scale(1.05);
 }
 
 .minimal-slide h3 {
@@ -398,33 +424,12 @@ main {
   z-index: 10;
 }
 
-.minimal-prev {
-  left: 15px;
-}
-
-.minimal-next {
-  right: 15px;
-}
-
-.minimal-slide-image:hover img {
-  transform: scale(1.05); /* Image grows to 105% of its size on hover */
-}
-
-.highlight-content .btn,
-.minimal-slide-content .btn,
-.slide-content .btn {
-    display: inline-block;
-    width: auto !important; /* Force width to be auto */
-    padding: 8px 16px;
-    font-size: 0.9rem;
-    max-width: fit-content; /* Ensure it only takes the width it needs */
-    text-align: center;
-}
+.minimal-prev { left: 15px; }
+.minimal-next { right: 15px; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   10. NEWS FEED & POSTS GRID
+   11. NEWS FEED & POSTS GRID
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== News Feed ===== */
 .news-feed {
   margin-bottom: 3rem;
 }
@@ -499,9 +504,8 @@ main {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   11. POST PAGE STYLES
+   12. POST PAGE STYLES
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Post Page Styles ===== */
 .post-header {
   position: relative;
   height: 200px;
@@ -568,20 +572,19 @@ main {
 }
 
 .post-content ul {
-  padding-left: 2rem; /* Controls overall list indentation */
+  padding-left: 2rem;
   margin: 1rem 0;
 }
 
 .post-content ul li {
   position: relative;
-  padding-left: 0.5rem; /* Space between bullet and text */
-  margin-bottom: 0.5rem; /* Space between list items */
+  padding-left: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
-/* MathJax equation alignment in list items */
 .post-content ul li .MathJax {
-  display: inline; /* Ensure equations don't break list layout */
-  vertical-align: middle; /* Align equations with text */
+  display: inline;
+  vertical-align: middle;
 }
 
 .post-tags {
@@ -611,16 +614,15 @@ main {
   margin-top: 1.5rem;
 }
 
-/* two equal-width columns for the figures */
+/* Figure grid for post content */
 .figure-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;            /* space between the two columns */
-  margin: 2rem auto;    /* vertical breathing room, center block */
-  max-width: 1400px;    /* optional: cap the overall width */
+  gap: 2rem;
+  margin: 2rem auto;
+  max-width: 1400px;
 }
 
-/* center each figure's content */
 .figure-grid figure {
   display: flex;
   flex-direction: column;
@@ -628,20 +630,17 @@ main {
   text-align: center;
 }
 
-/* the "A)" / "B)" label above each image */
 .figure-grid .fig-label {
   font-weight: bold;
   margin-bottom: 0.5rem;
   font-size: 1.2rem;
 }
 
-/* responsive images */
 .figure-grid figure img {
   max-width: 100%;
   height: auto;
 }
 
-/* italic caption under each image */
 .figure-grid figure figcaption {
   margin-top: 0.5rem;
   font-style: italic;
@@ -650,9 +649,8 @@ main {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   12. PAGINATION
+   13. PAGINATION
    ═══════════════════════════════════════════════════════════════════════════ */
-/* Pagination controls */
 .pagination {
   display: flex;
   justify-content: center;
@@ -708,9 +706,8 @@ main {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   13. LABORATORY/RESEARCH PAGES
+   14. LABORATORY/RESEARCH PAGES
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Laboratory Pages ===== */
 .lab-header {
   display: flex;
   flex-direction: column;
@@ -723,9 +720,9 @@ main {
 }
 
 .lab-header h1 {
-  font-family: "Open Sans", sans-serif; /* ensure consistent font */
-  font-weight: 800;                      /* extra bold */
-  font-size: 2.75rem;                    /* slightly larger */
+  font-family: "Open Sans", sans-serif;
+  font-weight: 800;
+  font-size: 2.75rem;
   line-height: 1.2;
   margin-bottom: 1rem;
   color: #0091BE;
@@ -734,12 +731,12 @@ main {
 .lab-header p {
   font-family: "Open Sans", sans-serif;
   font-weight: 400;
-  font-size: 1.125rem;                     /* a bit larger than normal body copy */
-  line-height: 1.7;                        /* more generous line-height for readability */
-  color: var(--color-text, #333333);       /* darker gray for readability */
-  max-width: 1400px;                        /* constrain width for easier reading */
-  margin: 0 auto;                          /* center the paragraph block */
-  padding: 0 1rem;                         /* small side padding on very narrow screens */
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: var(--color-text, #333333);
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .lab-info {
@@ -802,7 +799,7 @@ main {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   14. TEAM SECTION
+   15. TEAM SECTION
    ═══════════════════════════════════════════════════════════════════════════ */
 .team-section {
   background-color: #f9f9f9;
@@ -831,10 +828,12 @@ main {
   border: 4px solid #f0f0f0;
 }
 
-.member-image img {
+.member-image img,
+.team-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-radius: 50%;
 }
 
 .member-name {
@@ -858,19 +857,12 @@ main {
 }
 
 .member-link:hover {
-  text-decoration: underline; /* optional hover effect */
-}
-
-.team-img {
-  width: 100%;
-  border-radius: 50%;
-  object-fit: cover;
+  text-decoration: underline;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   15. PUBLICATIONS
+   16. PUBLICATIONS
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Publications ===== */
 .publications {
   margin-bottom: 3rem;
 }
@@ -945,9 +937,8 @@ main {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   16. ABOUT PAGE
+   17. ABOUT PAGE
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== About Page ===== */
 .about-section {
   margin-bottom: 3rem;
 }
@@ -979,28 +970,26 @@ section[align-items="center"] img {
 }
 
 .about-section figure {
-  /* display: block; text-align: center; */  /* ← remove these */
   display: flex;
-  flex-direction: column-reverse;  /* caption first, then image */
+  flex-direction: column-reverse;
   align-items: center;
-  margin-bottom: 1rem;             /* gap after the whole figure */
+  margin-bottom: 1rem;
 }
 
 .about-section figure img {
-  display: inline-block; /* centers inside the figure */
-  max-width: 100%;       /* responsive if you want */
+  display: inline-block;
+  max-width: 100%;
 }
 
 .about-section figcaption {
-  margin-bottom: 0.5rem; /* space *below* the title, above the image */
-  font-size: 240px !important; 
+  margin-bottom: 0.5rem;
+  font-size: 240px !important;
   color: #555;
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   17. CONTACT PAGE
+   18. CONTACT PAGE
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Contact Page ===== */
 .contact-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -1025,7 +1014,7 @@ section[align-items="center"] img {
 }
 
 .contact-icon .fas {
-  color: #64C8EB; /* Replace with your desired color */
+  color: #64C8EB;
 }
 
 .contact-form-container {
@@ -1058,7 +1047,6 @@ textarea.form-control {
   resize: vertical;
 }
 
-/* ===== Contact Page: Map Section ===== */
 .map-section {
   margin-top: 4rem;
   margin-bottom: 4rem;
@@ -1068,7 +1056,7 @@ textarea.form-control {
   margin-top: 2rem;
   height: 400px;
   background-color: #f0f0f0;
-  border-radius: 0; /* if you prefer no rounding on wrapper */
+  border-radius: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1083,9 +1071,8 @@ textarea.form-control {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   18. FOOTER
+   19. FOOTER
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Footer ===== */
 footer {
   background-color: #000000;
   color: white;
@@ -1159,48 +1146,217 @@ footer {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   19. ADDITIONAL COMPONENTS
+   20. DARK MODE STYLES
    ═══════════════════════════════════════════════════════════════════════════ */
-/* --------------------------
-   header.html: "home" link next to logo
-   -------------------------- */
-.logo-home-link {
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
+body.dark-mode {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+/* Header */
+body.dark-mode header {
+  background-color: #2a2a2a;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode nav ul li a {
+  color: #e0e0e0;
+}
+
+body.dark-mode nav ul li a.active {
+  color: #64C8EB;
+}
+
+body.dark-mode nav ul li a:hover {
+  color: #64C8EB;
+}
+
+body.dark-mode nav {
+  background-color: #2a2a2a;
+}
+
+/* Hero */
+body.dark-mode .hero {
+  background-color: #0091BE;
+  color: white;
+}
+
+/* Cards and boxes */
+body.dark-mode .post-card,
+body.dark-mode .mission-box,
+body.dark-mode .vision-box,
+body.dark-mode .team-section,
+body.dark-mode .contact-form-container {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .post-card:hover {
+  box-shadow: 0 5px 15px rgba(100, 200, 235, 0.3);
+}
+
+/* Buttons */
+body.dark-mode .filter-btn {
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+}
+
+body.dark-mode .filter-btn:hover,
+body.dark-mode .filter-btn.active {
+  background-color: #0091BE;
+  color: white;
+}
+
+body.dark-mode .btn {
+  background-color: #00a5d4;
+  color: white !important;
+}
+
+body.dark-mode .btn:hover {
+  background-color: #0091BE;
+  color: white !important;
+}
+
+/* Links */
+body.dark-mode a {
+  color: #64C8EB;
+}
+
+body.dark-mode a:hover {
+  color: #42B8E5;
+}
+
+/* Footer */
+body.dark-mode footer {
+  background-color: #0a0a0a;
+  border-top: 1px solid #2a2a2a;
+}
+
+/* Slider */
+body.dark-mode .minimal-slide {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+}
+
+body.dark-mode .minimal-slider {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Borders and dividers */
+body.dark-mode .publication-compact,
+body.dark-mode .topic-card {
+  border-bottom-color: #3a3a3a;
+}
+
+body.dark-mode .publications-container h3 {
+  color: #64C8EB;
+  border-bottom-color: #64C8EB;
+}
+
+body.dark-mode .post-meta {
+  border-bottom-color: #3a3a3a;
+}
+
+/* Forms */
+body.dark-mode .form-control {
+  background-color: #3a3a3a;
+  color: #e0e0e0;
+  border-color: #4a4a4a;
+}
+
+body.dark-mode .form-control:focus {
+  border-color: #64C8EB;
+  outline: none;
+}
+
+/* Post header */
+body.dark-mode .post-header-content {
+  background-color: rgba(0, 145, 190, 0.9);
+}
+
+/* Pagination */
+body.dark-mode .pagination-btn:disabled {
+  background-color: #3a3a3a;
+  color: #666;
+}
+
+body.dark-mode .page-numbers a {
+  color: #64C8EB;
+}
+
+body.dark-mode .page-numbers a:hover {
+  background-color: #3a3a3a;
+}
+
+/* Misc */
+body.dark-mode .topic-image {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .map-wrapper {
+  background-color: #2a2a2a;
+}
+
+body.dark-mode pre,
+body.dark-mode code {
+  background-color: #1a1a1a;
+  color: #e0e0e0;
+}
+
+/* Lab header dark mode styling */
+body.dark-mode .lab-header {
+  background-color: #2a2a2a;
+}
+
+body.dark-mode .lab-header h1 {
+  color: #64C8EB; /* Keep the teal color for heading */
+}
+
+body.dark-mode .lab-header p {
+  color: #e0e0e0; /* Light text for dark background */
+}
+
+/* Toggle icon change */
+body.dark-mode .dark-mode-btn i::before {
+  content: "\f185";
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   20. RESPONSIVE DESIGN
+   21. RESPONSIVE DESIGN
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ===== Responsive Design ===== */
-@media (max-width: 992px) {
-  h1 {
-    font-size: 2.2rem;
-  }
-  
-  h2 {
-    font-size: 1.8rem;
-  }
-  
-  h3 {
-    font-size: 1.5rem;
-  }
-  
-  .hero h1 {
-    font-size: 2.5rem;
-  }
 
-  .highlight-content {
-    flex: 0 0 50%;
+/* ========== Tablet (max-width: 992px) ========== */
+@media (max-width: 992px) {
+  h1 { font-size: 2.2rem; }
+  h2 { font-size: 1.8rem; }
+  h3 { font-size: 1.5rem; }
+  
+  .hero h1 { font-size: 2.5rem; }
+  
+  .topic-card {
+    flex-direction: column;
   }
   
-  .highlight-thumbnail {
-    flex: 0 0 45%;
+  .topic-content {
+    padding-right: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .topic-image {
+    flex: 1;
+    width: 100%;
+    max-width: 100%;
+  }
+  
+  .figure-grid {
+    grid-template-columns: 1fr;
   }
 }
 
+/* ========== Mobile (max-width: 768px) ========== */
 @media (max-width: 768px) {
+  /* Navigation */
   .mobile-menu-toggle {
     display: block;
   }
@@ -1233,147 +1389,36 @@ footer {
     display: block;
     padding: 0.5rem 0;
   }
+  
+  body.dark-mode nav {
+    background-color: #2a2a2a;
+  }
+  
+  .dark-mode-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+  
+  /* Header text */
+  .logo {
+    font-size: 1.2rem;
+  }
+  
+  .logo-home-link,
+  .logo-home-link span {
+    font-size: 1.2rem !important;
+  }
+  
+  /* Hero */
   .hero {
     padding: 3rem 0;
   }
   
-  .hero h1 {
-    font-size: 2rem;
-  }
+  .hero h1 { font-size: 2rem; }
+  .hero p { font-size: 1rem; }
   
-  .hero p {
-    font-size: 1rem;
-  }
-
-
-  .post-header-content {
-    padding: 1.5rem;
-  }
-
-  .minimal-slide {
-    flex-direction: column;
-  }
-
-  .minimal-slide-content,
-  .minimal-slide-image {
-      width: 100%;
-      height: 50%;
-  }
-
-  .minimal-slide-image {
-    border-radius: 0 0 8px 8px;
-}
-
-  .minimal-slide-image img {
-    border-radius: 0 0 8px 8px;
-    max-height: 95%;
-    max-width: 95%;
-}
-
-}
-
-@media (max-width: 576px) {
-  h1 {
-    font-size: 2rem;
-  }
-  
-  h2 {
-    font-size: 1.6rem;
-  }
-  
-  h3 {
-    font-size: 1.3rem;
-  }
-  
-  .container {
-    padding: 0 15px;
-  }
-  
-  .header-container {
-    padding: 10px 0;
-  }
-  
-  .logo img {
-    height: 40px;
-  }
-  
-  .highlights-slider {
-    height: 250px;
-  }
-  
-  .highlight-slide {
-    height: 250px;
-  }
-  
-  .highlight-content {
-    padding: 1rem;
-  }
-  
-  .hero {
-    padding: 2rem 0;
-  }
-  
-  .hero h1 {
-    font-size: 1.8rem;
-  }
-  
-  main {
-    margin-top: 60px;
-  }
-  
-  nav {
-    top: 60px;
-    height: calc(100vh - 60px);
-  }
-  
-  .lab-header h1 {
-    font-size: 2.25rem;
-  }
-  .lab-header p {
-    font-size: 1rem;
-    line-height: 1.6;
-  }
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   21. UTILITY CLASSES & MISCELLANEOUS
-   ═══════════════════════════════════════════════════════════════════════════ */
-.custom-icon-color {
-  color: #64C8EB;
-}
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   ADDITIONAL MOBILE FIXES
-   Add these styles to the existing CSS file
-   ═══════════════════════════════════════════════════════════════════════════ */
-
-/* ===== Tablet Fixes (max-width: 992px) ===== */
-@media (max-width: 992px) {
-  /* Fix research topic cards for tablets */
-  .topic-card {
-    flex-direction: column;
-  }
-  
-  .topic-content {
-    padding-right: 0;
-    margin-bottom: 1.5rem;
-  }
-  
-  .topic-image {
-    flex: 1;
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  /* Fix figure grid for tablets */
-  .figure-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ===== Mobile Fixes (max-width: 768px) ===== */
-@media (max-width: 768px) {
-  /* Fix slider text/image overlap */
+  /* Slider */
   .minimal-slider {
     height: auto;
     min-height: 500px;
@@ -1412,41 +1457,38 @@ footer {
     border-radius: 8px;
   }
   
-  /* Fix slider buttons for mobile */
   .minimal-slider-btn {
     width: 35px;
     height: 35px;
     font-size: 16px;
   }
   
-  .minimal-prev {
-    left: 10px;
-  }
+  .minimal-prev { left: 10px; }
+  .minimal-next { right: 10px; }
   
-  .minimal-next {
-    right: 10px;
-  }
-  
-  /* Fix mission/vision grid */
+  /* Grids */
   .mission-vision-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
     margin: 2rem 0;
   }
   
-  /* Fix team grid */
   .team-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1rem;
   }
   
-  /* Fix post meta layout */
+  /* Post page */
+  .post-header-content {
+    padding: 1.5rem;
+  }
+  
   .post-meta {
     flex-direction: column;
     align-items: flex-start;
   }
   
-  /* Fix lab header text */
+  /* Lab header */
   .lab-header {
     padding: 2rem 1rem;
   }
@@ -1462,13 +1504,13 @@ footer {
     padding: 0;
   }
   
-  /* Fix publication titles */
+  /* Publications */
   .publication-compact h4 {
     font-size: 1rem;
     word-wrap: break-word;
   }
   
-  /* Fix footer for mobile */
+  /* Footer */
   .footer-content {
     grid-template-columns: 1fr;
     text-align: center;
@@ -1478,7 +1520,7 @@ footer {
     justify-content: center;
   }
   
-  /* Fix about section figure */
+  /* About */
   .about-section figure {
     width: 100%;
     padding: 0 1rem;
@@ -1489,9 +1531,59 @@ footer {
   }
 }
 
-/* ===== Small Mobile Fixes (max-width: 576px) ===== */
+/* ========== Small Mobile (max-width: 576px) ========== */
 @media (max-width: 576px) {
-  /* Fix hero section */
+  /* Typography */
+  h1 { font-size: 2rem; }
+  h2 { font-size: 1.6rem; }
+  h3 { font-size: 1.3rem; }
+  
+  /* Layout */
+  .container {
+    padding: 0 15px;
+  }
+  
+  main {
+    margin-top: 60px;
+  }
+  
+  nav {
+    top: 60px;
+    height: calc(100vh - 60px);
+  }
+  
+  nav ul li a {
+    padding: 0.75rem 0;
+    font-size: 1.1rem;
+  }
+  
+  /* Header */
+  .header-container {
+    padding: 10px 0;
+  }
+  
+  .logo {
+    font-size: 1rem;
+    gap: 10px;
+  }
+  
+  .logo img {
+    height: 40px;
+  }
+  
+  .logo-home-link,
+  .logo-home-link span {
+    font-size: 1rem !important;
+  }
+  
+  .logo-home-link span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+  }
+  
+  /* Hero */
   .hero {
     padding: 2rem 0;
   }
@@ -1508,24 +1600,17 @@ footer {
     padding: 0 1rem;
   }
   
-  /* Fix main headings */
-  h1 {
-    font-size: 1.75rem;
-    line-height: 1.3;
-    word-wrap: break-word;
+  /* Lab header */
+  .lab-header h1 {
+    font-size: 2.25rem;
   }
   
-  h2 {
-    font-size: 1.4rem;
-    line-height: 1.3;
+  .lab-header p {
+    font-size: 1rem;
+    line-height: 1.6;
   }
   
-  h3 {
-    font-size: 1.2rem;
-    line-height: 1.3;
-  }
-  
-  /* Fix slider for small screens */
+  /* Slider */
   .minimal-slider {
     min-height: 450px;
   }
@@ -1550,7 +1635,7 @@ footer {
     font-size: 0.85rem;
   }
   
-  /* Fix posts grid */
+  /* Posts */
   .posts-grid {
     grid-template-columns: 1fr;
     gap: 1rem;
@@ -1560,7 +1645,7 @@ footer {
     margin: 0 1rem;
   }
   
-  /* Fix pagination */
+  /* Pagination */
   .pagination {
     flex-wrap: wrap;
     gap: 0.5rem;
@@ -1578,7 +1663,7 @@ footer {
     margin-top: 0.5rem;
   }
   
-  /* Fix team member cards */
+  /* Team */
   .team-grid {
     grid-template-columns: 1fr;
   }
@@ -1588,7 +1673,7 @@ footer {
     height: 120px;
   }
   
-  /* Fix research topic cards */
+  /* Research topics */
   .topic-card {
     margin-bottom: 2rem;
     padding-bottom: 1.5rem;
@@ -1603,7 +1688,7 @@ footer {
     height: 200px;
   }
   
-  /* Fix post header */
+  /* Post page */
   .post-header {
     height: 150px;
   }
@@ -1616,13 +1701,12 @@ footer {
     font-size: 1.5rem;
   }
   
-  /* Fix post author */
   .post-author img {
     width: 60px;
     height: 60px;
   }
   
-  /* Fix contact items */
+  /* Contact */
   .contact-item {
     flex-direction: column;
     text-align: center;
@@ -1633,19 +1717,19 @@ footer {
     margin-bottom: 0.5rem;
   }
   
-  /* Fix buttons globally */
+  /* Buttons */
   .btn {
     font-size: 0.9rem;
     padding: 8px 16px;
   }
   
-  /* Fix mission/vision boxes */
+  /* Mission/Vision */
   .mission-box,
   .vision-box {
     padding: 1.5rem;
   }
   
-  /* Fix publications */
+  /* Publications */
   .publications-container h3 {
     font-size: 1.3rem;
   }
@@ -1662,60 +1746,40 @@ footer {
     font-size: 0.85rem;
   }
   
-  /* Fix navigation menu */
-  nav ul li a {
-    padding: 0.75rem 0;
-    font-size: 1.1rem;
-  }
-  
-  /* Ensure containers have proper padding */
-  .container {
-    padding: 0 15px;
-  }
-  
-  /* Fix any overflow issues */
+  /* Ensure no overflow */
   body {
     overflow-x: hidden;
   }
-  
-  /* Ensure all images are responsive */
-  img {
-    max-width: 100%;
-    height: auto;
-  }
 }
 
-/* ===== Extra Small Mobile (max-width: 380px) ===== */
+/* ========== Extra Small Mobile (max-width: 380px) ========== */
 @media (max-width: 380px) {
-  /* Further reduce font sizes for very small screens */
-  .hero h1 {
-    font-size: 1.3rem;
+  /* Typography */
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1.25rem; }
+  h3 { font-size: 1.1rem; }
+  
+  .hero h1 { font-size: 1.3rem; }
+  
+  /* Header */
+  .logo { font-size: 0.9rem; }
+  
+  .logo-home-link,
+  .logo-home-link span {
+    font-size: 0.9rem !important;
   }
   
-  h1 {
-    font-size: 1.5rem;
+  .logo-home-link span {
+    max-width: 150px;
   }
   
-  h2 {
-    font-size: 1.25rem;
-  }
-  
-  h3 {
-    font-size: 1.1rem;
-  }
-  
-  .minimal-slide h3 {
-    font-size: 1.1rem;
-  }
-  
-  .minimal-slide p {
-    font-size: 0.85rem;
-  }
-  
-  /* Adjust slider height */
+  /* Slider */
   .minimal-slider {
     min-height: 400px;
   }
+  
+  .minimal-slide h3 { font-size: 1.1rem; }
+  .minimal-slide p { font-size: 0.85rem; }
   
   .minimal-slide-content {
     min-height: 180px;
@@ -1725,9 +1789,16 @@ footer {
     height: 200px;
   }
   
-  /* Ensure proper text wrapping */
+  /* Force word wrap */
   * {
     word-wrap: break-word;
     overflow-wrap: break-word;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   22. UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════════════════ */
+.custom-icon-color {
+  color: #64C8EB;
 }
