@@ -6,7 +6,7 @@ const getBasePath = () => {
     const hasSubdirectory = pathArray.length > 2 && pathArray[1] !== '' && !pathArray[1].includes('.html');
     
     if (hasSubdirectory && window.location.hostname.includes('github.io')) {
-        return '/' + pathArray[1] + '/';
+        return '/' + pathArray[1].toLowerCase() + '/';
     }
     return '';
 };
