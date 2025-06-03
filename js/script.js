@@ -6,7 +6,7 @@ const getBasePath = () => {
     const hasSubdirectory = pathArray.length > 2 && pathArray[1] !== '' && !pathArray[1].includes('.html');
     
     if (hasSubdirectory && window.location.hostname.includes('github.io')) {
-        return '/' + pathArray[1].toLowerCase() + '/';
+        return '/' + pathArray[1] + '/';
     }
     return '';
 };
@@ -64,7 +64,8 @@ function loadHeader() {
     //     ? '../../header.html' 
     //     : 'header.html';
 
-    const headerPath_temp = isPostPage() ? '../../header.html' : 'header.html';
+    // const headerPath_temp = isPostPage() ? '../../header.html' : 'header.html';
+    const headerPath_temp = 'header.html';
 
     console.log("Here: ", BASE_PATH);
 
