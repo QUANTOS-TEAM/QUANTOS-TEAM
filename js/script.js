@@ -1,181 +1,221 @@
-// Main JavaScript file for Research Group Website
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * QUANTOS Research Team - Main JavaScript
+ * 
+ * Table of Contents:
+ * 1. Constants & Configuration
+ * 2. Utility Functions
+ * 3. Header & Footer Management
+ * 4. Navigation Functions
+ * 5. Slider/Carousel Functions
+ * 6. Posts & Filtering
+ * 7. Form Validation
+ * 8. Content Loading
+ * 9. Initialization
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
 
+// ═══════════════════════════════════════════════════════════════════════════
+// 1. CONSTANTS & CONFIGURATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+const CONFIG = {
+    POSTS_PER_PAGE: 12,
+    SLIDER_INTERVAL: 5000,
+    ANIMATION_DURATION: 300,
+    MOBILE_BREAKPOINT: 768
+};
+
+const SELECTORS = {
+    HEADER_PLACEHOLDER: '#header-placeholder',
+    FOOTER_PLACEHOLDER: '#footer-placeholder',
+    POSTS_CONTAINER: '#posts-container',
+    POST_CONTENT: '.post-content',
+    NEWS_FILTER: '.news-filter',
+    CONTACT_FORM: '#contactForm',
+    SLIDER: {
+        CONTAINER: '#minimal-slides-container',
+        DOTS: '#minimal-slider-dots',
+        PREV: '#minimal-prev',
+        NEXT: '#minimal-next'
+    },
+    PAGINATION: {
+        PREV: '#prev-page',
+        NEXT: '#next-page',
+        NUMBERS: '#page-numbers'
+    }
+};
+
+// State management
+const STATE = {
+    currentPage: 1,
+    allPosts: [],
+    filteredPosts: [],
+    currentFilter: 'all',
+    sliderIndex: 0,
+    sliderInterval: null
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 2. UTILITY FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Determines the base path for the site (handles GitHub Pages subdirectories)
+ * @returns {string} Base path with trailing slash or empty string
+ */
 const getBasePath = () => {
-    // Check if we're in a subdirectory (GitHub Pages)
     const pathArray = window.location.pathname.split('/');
-    const hasSubdirectory = pathArray.length > 2 && pathArray[1] !== '' && !pathArray[1].includes('.html');
+    const hasSubdirectory = pathArray.length > 2 && 
+                           pathArray[1] !== '' && 
+                           !pathArray[1].includes('.html');
     
     if (hasSubdirectory && window.location.hostname.includes('github.io')) {
-        return '/' + pathArray[1] + '/';
+        return `/${pathArray[1]}/`;
     }
     return '';
 };
 
-const isPostPage = () => {
-    return window.location.pathname.includes('/posts/');
+/**
+ * Checks if current page is a post page
+ * @returns {boolean} True if on a post page
+ */
+const isPostPage = () => window.location.pathname.includes('/posts/');
+
+/**
+ * Validates email format
+ * @param {string} email - Email address to validate
+ * @returns {boolean} True if valid email format
+ */
+const isValidEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email.toLowerCase());
 };
 
+/**
+ * Safely queries DOM element
+ * @param {string} selector - CSS selector
+ * @returns {Element|null} DOM element or null
+ */
+const getElement = (selector) => document.querySelector(selector);
+
+/**
+ * Safely queries all matching DOM elements
+ * @param {string} selector - CSS selector
+ * @returns {NodeList} List of matching elements
+ */
+const getElements = (selector) => document.querySelectorAll(selector);
+
+// Cache base path
 const BASE_PATH = getBasePath();
 
-
-// DOM Content Loaded Event - Main initialization
-document.addEventListener('DOMContentLoaded', function() {
-    // Load header and footer
-    loadHeader();
-    loadFooter();
-
-    initMinimalSlider();
-    
-    // Initialize components if they exist
-    // if (document.querySelector('.mini-highlights-slider')) {
-    //     initMinimalSlider();
-    // }
-    
-    if (document.querySelector('.news-filter')) {
-        initPostFiltering();
-    }
-    
-    if (document.querySelector('#contactForm')) {
-        initContactFormValidation();
-    }
-    
-    if (document.querySelector('#posts-container')) {
-        loadPosts();
-    }
-
-    if (document.querySelector('.post-content')) {
-        loadMarkdownContent();
-    }
-
-    loadSiteVariables();
-});
-
-// ===== HEADER & FOOTER FUNCTIONS =====
+// ═══════════════════════════════════════════════════════════════════════════
+// 3. HEADER & FOOTER MANAGEMENT
+// ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Loads the header based on current path
+ * Adjusts paths in HTML content for post pages
+ * @param {string} html - HTML content to process
+ * @returns {string} Processed HTML with adjusted paths
  */
-function loadHeader() {
-    const headerPlaceholder = document.getElementById('header-placeholder');
-    if (!headerPlaceholder) return;
+const adjustPathsForPosts = (html) => {
+    if (!isPostPage()) return html;
     
-    // For post pages, we need to go up two directories
+    // Fix image sources
+    html = html.replace(/src="img\//g, 'src="../../img/');
+    
+    // Fix HTML links
+    html = html.replace(/href="([^"]*\.html)"/g, (match, p1) => {
+        if (p1.startsWith('http') || p1.startsWith('#')) {
+            return match;
+        }
+        return `href="../../${p1}"`;
+    });
+    
+    return html;
+};
+
+/**
+ * Loads and injects header HTML
+ */
+async function loadHeader() {
+    const placeholder = getElement(SELECTORS.HEADER_PLACEHOLDER);
+    if (!placeholder) return;
+    
     const headerPath = isPostPage() ? '../../header.html' : 'header.html';
     
-    fetch(headerPath)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to load header: ' + response.status);
-            }
-            return response.text();
-        })
-        .then(data => {
-            // If we're in a post, adjust the paths in the header HTML
-            if (isPostPage()) {
-                // Fix image sources (including the logo)
-                data = data.replace(/src="img\//g, 'src="../../img/');
-                // Fix all HTML links (navigation links like index.html, about.html, etc.)
-                data = data.replace(/href="([^"]*\.html)"/g, function(match, p1) {
-                    // Don't modify external links or anchors
-                    if (p1.startsWith('http') || p1.startsWith('#')) {
-                        return match;
-                    }
-                    return 'href="../../' + p1 + '"';
-                });
-            }
-            headerPlaceholder.innerHTML = data;
-            // Initialize after header loads
-            setActiveNavLink();
-            initMobileNav();
-        })
-        .catch(error => {
-            console.error('Error loading header:', error);
-            headerPlaceholder.innerHTML = '<header><div class="container"><div class="logo">Research Group</div></div></header>';
-        });
+    try {
+        const response = await fetch(headerPath);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        let html = await response.text();
+        html = adjustPathsForPosts(html);
+        
+        placeholder.innerHTML = html;
+        
+        // Initialize header-dependent features
+        setActiveNavLink();
+        initMobileNav();
+    } catch (error) {
+        console.error('Error loading header:', error);
+        placeholder.innerHTML = '<header><div class="container"><div class="logo">QUANTOS</div></div></header>';
+    }
 }
 
 /**
- * Loads the footer based on current path
+ * Loads and injects footer HTML
  */
-function loadFooter() {
-    const footerPlaceholder = document.getElementById('footer-placeholder');
-    if (!footerPlaceholder) return;
+async function loadFooter() {
+    const placeholder = getElement(SELECTORS.FOOTER_PLACEHOLDER);
+    if (!placeholder) return;
     
-    // For post pages, we need to go up two directories
     const footerPath = isPostPage() ? '../../footer.html' : 'footer.html';
     
-    fetch(footerPath)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Failed to load footer: ' + response.status);
-            }
-            return response.text();
-        })
-        .then(data => {
-            // If we're in a post, adjust the paths in the footer HTML
-            if (isPostPage()) {
-                // Fix image sources (including the logo)
-                data = data.replace(/src="img\//g, 'src="../../img/');
-                // Fix all HTML links (navigation links like index.html, about.html, etc.)
-                data = data.replace(/href="([^"]*\.html)"/g, function(match, p1) {
-                    // Don't modify external links or anchors
-                    if (p1.startsWith('http') || p1.startsWith('#')) {
-                        return match;
-                    }
-                    return 'href="../../' + p1 + '"';
-                });
-            }
-            footerPlaceholder.innerHTML = data;
-        })
-        .catch(error => {
-            console.error('Error loading footer:', error);
-            footerPlaceholder.innerHTML = '<footer><div class="container"><p>Footer content unavailable.</p></div></footer>';
-        });
+    try {
+        const response = await fetch(footerPath);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        
+        let html = await response.text();
+        html = adjustPathsForPosts(html);
+        
+        placeholder.innerHTML = html;
+    } catch (error) {
+        console.error('Error loading footer:', error);
+        placeholder.innerHTML = '<footer><div class="container"><p>© 2025 QUANTOS Research Team</p></div></footer>';
+    }
 }
 
-/**
- * Sets active navigation link based on current page
- */
+// ═══════════════════════════════════════════════════════════════════════════
+// 4. NAVIGATION FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
 
+/**
+ * Sets active state on current navigation link
+ */
 function setActiveNavLink() {
-    const currentPage = window.location.pathname;
-    const navLinks = document.querySelectorAll('nav ul li a');
+    const currentPath = window.location.pathname;
+    const navLinks = getElements('nav ul li a');
     
     navLinks.forEach(link => {
-        // Remove active class from all links
         link.classList.remove('active');
         
         let href = link.getAttribute('href');
         
-        // For post pages, clean up the href for comparison
-        if (isPostPage() && href.startsWith('../../')) {
+        // Clean up href for post pages
+        if (isPostPage() && href?.startsWith('../../')) {
             href = href.replace('../../', '');
         }
         
-        // Determine if this link should be active
+        // Determine active state
         let shouldBeActive = false;
         
         if (isPostPage()) {
-            // For post pages, you might want to highlight "Home" or leave no nav active
-            // Option 1: Highlight "Home" for all posts
-            if (href === 'index.html') {
-                shouldBeActive = true;
-            }
-            // Option 2: Leave no navigation highlighted (comment out the above)
+            // Highlight home for all post pages
+            shouldBeActive = href === 'index.html';
         } else {
-            // For regular pages
-            const currentPageName = currentPage.split('/').pop();
-            
-            if (
-                // Exact match
-                currentPageName === href ||
-                // Root matches index.html
-                (currentPage.endsWith('/') && href === 'index.html') ||
-                // Special case for laboratories
-                (currentPage.includes('/lab') && href === 'laboratories.html')
-            ) {
-                shouldBeActive = true;
-            }
+            const currentPageName = currentPath.split('/').pop();
+            shouldBeActive = currentPageName === href || 
+                           (currentPath.endsWith('/') && href === 'index.html');
         }
         
         if (shouldBeActive) {
@@ -184,623 +224,670 @@ function setActiveNavLink() {
     });
 }
 
-
-// function setActiveNavLink() {
-//     const currentPage = window.location.pathname;
-//     const navLinks = document.querySelectorAll('nav ul li a');
-    
-//     navLinks.forEach(link => {
-//         // Remove active class from all links
-//         link.classList.remove('active');
-        
-//         const href = link.getAttribute('href');
-        
-//         // Add active class to the current page link
-//         if (currentPage.endsWith(href) || 
-//             (currentPage.endsWith('/') && href === '/index.html') ||
-//             (currentPage.includes('/posts/') && href === '/index.html') ||
-//             (currentPage.includes('/lab') && href === '/laboratories.html')) {
-//             link.classList.add('active');
-//         }
-//     });
-// }
-
 /**
- * Initializes mobile navigation functionality
+ * Initializes mobile navigation menu
  */
 function initMobileNav() {
-    const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
-    const nav = document.querySelector('nav');
+    const toggle = getElement('.mobile-menu-toggle');
+    const nav = getElement('nav');
     
-    if (!mobileMenuToggle || !nav) return;
+    if (!toggle || !nav) return;
     
-    // 1) Click handler (unchanged)
-    mobileMenuToggle.addEventListener('click', function() {
+    // Toggle menu on click
+    toggle.addEventListener('click', function() {
         nav.classList.toggle('active');
-        
-        // Toggle between menu (☰) and close (✕) icons
         this.innerHTML = this.innerHTML === '☰' ? '✕' : '☰';
     });
     
-    // 2) Keydown handler so Enter/Space also toggles
-    mobileMenuToggle.addEventListener('keydown', function(e) {
-        // Check for Enter or Space key
+    // Keyboard accessibility
+    toggle.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();              // Prevent page from scrolling on Space
-            this.click();                    // Reuse the click‐handler logic
+            e.preventDefault();
+            this.click();
         }
     });
     
-    // 3) Close mobile menu when clicking on any nav link (unchanged)
-    const navLinks = document.querySelectorAll('nav ul li a');
+    // Close menu when clicking nav links on mobile
+    const navLinks = getElements('nav ul li a');
     navLinks.forEach(link => {
         link.addEventListener('click', function() {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
                 nav.classList.remove('active');
-                mobileMenuToggle.innerHTML = '☰';
+                toggle.innerHTML = '☰';
             }
         });
     });
 }
 
-// ===== HIGHLIGHTS & SLIDER FUNCTIONS =====
+// ═══════════════════════════════════════════════════════════════════════════
+// 5. SLIDER/CAROUSEL FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Loads highlights from posts with "highlight" tag
+ * Creates a slide element
+ * @param {Object} post - Post data
+ * @returns {HTMLElement} Slide element
  */
+function createSlide(post) {
+    const slide = document.createElement('div');
+    slide.className = 'minimal-slide';
+    
+    slide.innerHTML = `
+        <div class="minimal-slide-content">
+            <span class="post-type">${post.postType}</span>
+            <h3>${post.title}</h3>
+            <p>${post.excerpt}</p>
+            <a href="posts/${post.folder}/${post.index_file_name}.html" class="btn">Read More</a>
+        </div>
+        <div class="minimal-slide-image">
+            <img src="posts/${post.folder}/thumbnail.png" alt="${post.title}">
+        </div>
+    `;
+    
+    return slide;
+}
 
+/**
+ * Updates slider to show specific slide
+ * @param {number} index - Slide index to show
+ */
+function goToSlide(index) {
+    const container = getElement(SELECTORS.SLIDER.CONTAINER);
+    const dots = getElements('.minimal-dot');
+    
+    if (!container) return;
+    
+    container.style.transform = `translateX(-${index * 100}%)`;
+    
+    dots.forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+    });
+    
+    STATE.sliderIndex = index;
+}
+
+/**
+ * Starts automatic slide progression
+ */
+function startSliderAutoPlay() {
+    stopSliderAutoPlay();
+    STATE.sliderInterval = setInterval(() => {
+        const slides = getElements('.minimal-slide');
+        if (slides.length > 0) {
+            const nextIndex = (STATE.sliderIndex + 1) % slides.length;
+            goToSlide(nextIndex);
+        }
+    }, CONFIG.SLIDER_INTERVAL);
+}
+
+/**
+ * Stops automatic slide progression
+ */
+function stopSliderAutoPlay() {
+    if (STATE.sliderInterval) {
+        clearInterval(STATE.sliderInterval);
+        STATE.sliderInterval = null;
+    }
+}
+
+/**
+ * Initializes the highlights slider
+ */
 async function initMinimalSlider() {
-    const slidesContainer = document.getElementById('minimal-slides-container');
-    const dotsContainer = document.getElementById('minimal-slider-dots');
+    const container = getElement(SELECTORS.SLIDER.CONTAINER);
+    const dotsContainer = getElement(SELECTORS.SLIDER.DOTS);
     
-    if (!slidesContainer || !dotsContainer) return;
+    if (!container || !dotsContainer) return;
     
-    // Clear any existing content
-    slidesContainer.innerHTML = '';
+    // Clear existing content
+    container.innerHTML = '';
     dotsContainer.innerHTML = '';
     
     try {
-        // Fetch posts data from JSON file
         const response = await fetch(BASE_PATH + 'posts/posts.json');
-        if (!response.ok) {
-            throw new Error('Failed to load posts data');
-        }
+        if (!response.ok) throw new Error('Failed to load posts');
         
         const posts = await response.json();
+        const highlights = posts.filter(post => post.tags?.includes('highlight'));
         
-        // Filter posts with the "highlight" tag
-        const highlights = posts.filter(post => 
-            post.tags && post.tags.includes('highlight')
-        );
-        
-        // Check if we found any highlights
         if (highlights.length === 0) {
-            slidesContainer.innerHTML = `
+            container.innerHTML = `
                 <div class="minimal-slide">
                     <div class="minimal-slide-content">
                         <h3>No highlights available</h3>
-                        <p>There are currently no highlighted posts to display.</p>
+                        <p>Check back soon for featured content.</p>
                     </div>
-                    <div class="minimal-slide-image">
-                        <!-- Placeholder image or leave empty -->
-                    </div>
+                    <div class="minimal-slide-image"></div>
                 </div>
             `;
             return;
         }
         
-        // Create slides for each highlight
+        // Create slides and dots
         highlights.forEach((post, index) => {
-            // Create slide element
-            const slideElement = document.createElement('div');
-            slideElement.className = 'minimal-slide';
+            // Add slide
+            container.appendChild(createSlide(post));
             
-            // Create slide content
-            slideElement.innerHTML = `
-                <div class="minimal-slide-content">
-                    <span class="post-type">${post.postType}</span>
-                    <h3>${post.title}</h3>
-                    <p>${post.excerpt}</p>
-                    <a href="posts/${post.folder}/${post.index_file_name}.html" class="btn">Read More</a>
-                </div>
-                <div class="minimal-slide-image">
-                    <img src="posts/${post.folder}/thumbnail.png" alt="${post.title}">
-                </div>
-            `;
-            
-            // Add slide to container
-            slidesContainer.appendChild(slideElement);
-            
-            // Create navigation dot
+            // Add dot
             const dot = document.createElement('div');
             dot.className = 'minimal-dot';
-            if (index === 0) dot.classList.add('active');
             dot.dataset.index = index;
+            if (index === 0) dot.classList.add('active');
             dotsContainer.appendChild(dot);
         });
         
-        // Set up slider functionality
-        const slideElements = document.querySelectorAll('.minimal-slide');
-        const dots = document.querySelectorAll('.minimal-dot');
-        const prevBtn = document.getElementById('minimal-prev');
-        const nextBtn = document.getElementById('minimal-next');
+        // Initialize controls
+        setupSliderControls();
         
-        let currentIndex = 0;
-        
-        // Function to go to a specific slide
-        function goToSlide(index) {
-            slidesContainer.style.transform = `translateX(-${index * 100}%)`;
-            
-            // Update active dot
-            dots.forEach(dot => dot.classList.remove('active'));
-            dots[index]?.classList.add('active');
-            
-            currentIndex = index;
-        }
-        
-        // Add event listeners to dots
-        dots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                goToSlide(index);
-            });
-        });
-        
-        // Add event listeners to buttons
-        if (prevBtn) {
-            prevBtn.addEventListener('click', () => {
-                const newIndex = (currentIndex - 1 + slideElements.length) % slideElements.length;
-                goToSlide(newIndex);
-            });
-        }
-        
-        if (nextBtn) {
-            nextBtn.addEventListener('click', () => {
-                const newIndex = (currentIndex + 1) % slideElements.length;
-                goToSlide(newIndex);
-            });
-        }
-        
-        // Auto-slide functionality
-        let slideInterval = setInterval(() => {
-            const newIndex = (currentIndex + 1) % slideElements.length;
-            goToSlide(newIndex);
-        }, 5000);
+        // Start autoplay
+        startSliderAutoPlay();
         
         // Pause on hover
-        slidesContainer.addEventListener('mouseenter', () => {
-            clearInterval(slideInterval);
-        });
-        
-        slidesContainer.addEventListener('mouseleave', () => {
-            slideInterval = setInterval(() => {
-                const newIndex = (currentIndex + 1) % slideElements.length;
-                goToSlide(newIndex);
-            }, 5000);
-        });
+        container.addEventListener('mouseenter', stopSliderAutoPlay);
+        container.addEventListener('mouseleave', startSliderAutoPlay);
         
     } catch (error) {
-        console.error('Error loading highlights:', error);
-        slidesContainer.innerHTML = `
+        console.error('Error initializing slider:', error);
+        container.innerHTML = `
             <div class="minimal-slide">
                 <div class="minimal-slide-content">
                     <h3>Error loading highlights</h3>
-                    <p>There was a problem loading the highlighted posts. Please refresh the page to try again.</p>
+                    <p>Please refresh the page to try again.</p>
                 </div>
-                <div class="minimal-slide-image">
-                    <!-- Placeholder image or leave empty -->
-                </div>
+                <div class="minimal-slide-image"></div>
             </div>
         `;
     }
 }
 
-// ===== POSTS & FILTERING FUNCTIONS =====
+/**
+ * Sets up slider control event listeners
+ */
+function setupSliderControls() {
+    // Dot navigation
+    const dots = getElements('.minimal-dot');
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => goToSlide(index));
+    });
+    
+    // Button navigation
+    const prevBtn = getElement(SELECTORS.SLIDER.PREV);
+    const nextBtn = getElement(SELECTORS.SLIDER.NEXT);
+    const slides = getElements('.minimal-slide');
+    
+    if (prevBtn && slides.length > 0) {
+        prevBtn.addEventListener('click', () => {
+            const newIndex = (STATE.sliderIndex - 1 + slides.length) % slides.length;
+            goToSlide(newIndex);
+        });
+    }
+    
+    if (nextBtn && slides.length > 0) {
+        nextBtn.addEventListener('click', () => {
+            const newIndex = (STATE.sliderIndex + 1) % slides.length;
+            goToSlide(newIndex);
+        });
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 6. POSTS & FILTERING
+// ═══════════════════════════════════════════════════════════════════════════
 
 /**
- * Loads posts from JSON file or uses static fallback
+ * Creates a post card HTML
+ * @param {Object} post - Post data
+ * @returns {string} Post card HTML
  */
-// Pagination and filtering variables
-let currentPage = 1;
-const postsPerPage = 12; // Adjust as needed
-let allPosts = []; // All posts from JSON
-let filteredPosts = []; // Posts after filtering
-let currentFilter = 'all'; // Current active filter
-
-// Load posts with pagination and filtering support
-async function loadPosts() {
-  try {
-    // Fetch posts data once
-    if (allPosts.length === 0) {
-      const response = await fetch(BASE_PATH + 'posts/posts.json');
-      if (!response.ok) {
-        throw new Error('Failed to load posts');
-      }
-      allPosts = await response.json();
-      filteredPosts = [...allPosts]; // Initialize with all posts
-    }
-
-    // Display the current page
-    displayPostsPage(currentPage);
-    updatePaginationControls();
-    
-    // Initialize filter buttons
-    initPostFiltering();
-  } catch (error) {
-    console.error('Error loading posts:', error);
-    document.getElementById('posts-container').innerHTML = 
-      '<p>Failed to load posts. Please try again later.</p>';
-  }
-}
-
-// Display posts for the current page
-function displayPostsPage(page) {
-  const postsContainer = document.getElementById('posts-container');
-  postsContainer.innerHTML = ''; // Clear current posts
-  
-  // Calculate which posts to show
-  const startIndex = (page - 1) * postsPerPage;
-  const endIndex = startIndex + postsPerPage;
-  const postsToShow = filteredPosts.slice(startIndex, endIndex);
-  
-  if (postsToShow.length === 0) {
-    postsContainer.innerHTML = '<p>No posts match the current filter.</p>';
-    return;
-  }
-  
-  // Create HTML for each post
-  postsToShow.forEach(post => {
-    const postHTML = `
-      <div class="post-card" data-post="${post.tags[0]}">
-        <div class="post-image">
-          <img src="posts/${post.folder}/thumbnail.png" alt="${post.title}">
+function createPostCard(post) {
+    return `
+        <div class="post-card" data-post="${post.tags?.[0] || ''}">
+            <div class="post-image">
+                <img src="posts/${post.folder}/thumbnail.png" alt="${post.title}">
+            </div>
+            <div class="post-content">
+                <span class="post-type">${post.postType}</span>
+                <h3 class="post-title">${post.title}</h3>
+                <p class="post-date">${post.date}</p>
+                <p class="post-excerpt">${post.excerpt}</p>
+                <a href="posts/${post.folder}/${post.index_file_name}.html" class="btn">Read More</a>
+            </div>
         </div>
-        <div class="post-content">
-          <span class="post-type">${post.postType}</span>
-          <h3 class="post-title">${post.title}</h3>
-          <p class="post-date">${post.date}</p>
-          <p class="post-excerpt">${post.excerpt}</p>
-          <a href="posts/${post.folder}/${post.index_file_name}.html" class="btn">Read More</a>
-        </div>
-      </div>
     `;
+}
+
+/**
+ * Loads all posts from JSON file
+ */
+async function loadPosts() {
+    const container = getElement(SELECTORS.POSTS_CONTAINER);
+    if (!container) return;
     
-    postsContainer.innerHTML += postHTML;
-  });
+    try {
+        if (STATE.allPosts.length === 0) {
+            const response = await fetch(BASE_PATH + 'posts/posts.json');
+            if (!response.ok) throw new Error('Failed to load posts');
+            
+            STATE.allPosts = await response.json();
+            STATE.filteredPosts = [...STATE.allPosts];
+        }
+        
+        displayPostsPage(STATE.currentPage);
+        updatePaginationControls();
+        initPostFiltering();
+        
+    } catch (error) {
+        console.error('Error loading posts:', error);
+        container.innerHTML = '<p>Failed to load posts. Please try again later.</p>';
+    }
 }
 
-// Update pagination buttons and page numbers
+/**
+ * Displays posts for current page
+ * @param {number} page - Page number to display
+ */
+function displayPostsPage(page) {
+    const container = getElement(SELECTORS.POSTS_CONTAINER);
+    if (!container) return;
+    
+    const startIndex = (page - 1) * CONFIG.POSTS_PER_PAGE;
+    const endIndex = startIndex + CONFIG.POSTS_PER_PAGE;
+    const postsToShow = STATE.filteredPosts.slice(startIndex, endIndex);
+    
+    if (postsToShow.length === 0) {
+        container.innerHTML = '<p>No posts match the current filter.</p>';
+        return;
+    }
+    
+    container.innerHTML = postsToShow.map(createPostCard).join('');
+}
+
+/**
+ * Updates pagination controls based on current state
+ */
 function updatePaginationControls() {
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-  const prevButton = document.getElementById('prev-page');
-  const nextButton = document.getElementById('next-page');
-  const pageNumbers = document.getElementById('page-numbers');
-  
-  // Update buttons state
-  prevButton.disabled = currentPage === 1;
-  nextButton.disabled = currentPage === totalPages || totalPages === 0;
-  
-  // Generate page numbers
-  pageNumbers.innerHTML = '';
-  
-  if (totalPages === 0) {
-    pageNumbers.innerHTML = '<span class="current-page">0</span>';
-    return;
-  }
-  
-  // Calculate range of page numbers to show
-  let startPage = Math.max(1, currentPage - 2);
-  let endPage = Math.min(totalPages, startPage + 4);
-  
-  // Adjust if we're near the end
-  if (endPage - startPage < 4) {
-    startPage = Math.max(1, endPage - 4);
-  }
-  
-  // Add first page link if needed
-  if (startPage > 1) {
-    pageNumbers.innerHTML += `<a href="#" data-page="1">1</a>`;
-    if (startPage > 2) {
-      pageNumbers.innerHTML += `<span>...</span>`;
-    }
-  }
-  
-  // Add page number links
-  for (let i = startPage; i <= endPage; i++) {
-    if (i === currentPage) {
-      pageNumbers.innerHTML += `<span class="current-page">${i}</span>`;
-    } else {
-      pageNumbers.innerHTML += `<a href="#" data-page="${i}">${i}</a>`;
-    }
-  }
-  
-  // Add last page link if needed
-  if (endPage < totalPages) {
-    if (endPage < totalPages - 1) {
-      pageNumbers.innerHTML += `<span>...</span>`;
-    }
-    pageNumbers.innerHTML += `<a href="#" data-page="${totalPages}">${totalPages}</a>`;
-  }
-  
-  // Add click event to page number links
-  document.querySelectorAll('.page-numbers a').forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      currentPage = parseInt(this.getAttribute('data-page'));
-      displayPostsPage(currentPage);
-      updatePaginationControls();
-      // Scroll to top of posts section
-      document.querySelector('.news-feed').scrollIntoView({ behavior: 'smooth' });
+    const totalPages = Math.ceil(STATE.filteredPosts.length / CONFIG.POSTS_PER_PAGE);
+    const prevButton = getElement(SELECTORS.PAGINATION.PREV);
+    const nextButton = getElement(SELECTORS.PAGINATION.NEXT);
+    const pageNumbers = getElement(SELECTORS.PAGINATION.NUMBERS);
+    
+    if (!prevButton || !nextButton || !pageNumbers) return;
+    
+    // Update button states
+    prevButton.disabled = STATE.currentPage === 1;
+    nextButton.disabled = STATE.currentPage === totalPages || totalPages === 0;
+    
+    // Generate page numbers
+    pageNumbers.innerHTML = generatePageNumbers(totalPages);
+    
+    // Add click handlers to page links
+    getElements('.page-numbers a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            STATE.currentPage = parseInt(this.dataset.page);
+            displayPostsPage(STATE.currentPage);
+            updatePaginationControls();
+            scrollToSection('.news-feed');
+        });
     });
-  });
 }
 
-// Initialize post filtering
+/**
+ * Generates pagination number links HTML
+ * @param {number} totalPages - Total number of pages
+ * @returns {string} HTML for page numbers
+ */
+function generatePageNumbers(totalPages) {
+    if (totalPages === 0) return '<span class="current-page">0</span>';
+    
+    const current = STATE.currentPage;
+    let html = '';
+    
+    // Calculate visible page range
+    let startPage = Math.max(1, current - 2);
+    let endPage = Math.min(totalPages, startPage + 4);
+    
+    if (endPage - startPage < 4) {
+        startPage = Math.max(1, endPage - 4);
+    }
+    
+    // First page
+    if (startPage > 1) {
+        html += `<a href="#" data-page="1">1</a>`;
+        if (startPage > 2) html += '<span>...</span>';
+    }
+    
+    // Page range
+    for (let i = startPage; i <= endPage; i++) {
+        if (i === current) {
+            html += `<span class="current-page">${i}</span>`;
+        } else {
+            html += `<a href="#" data-page="${i}">${i}</a>`;
+        }
+    }
+    
+    // Last page
+    if (endPage < totalPages) {
+        if (endPage < totalPages - 1) html += '<span>...</span>';
+        html += `<a href="#" data-page="${totalPages}">${totalPages}</a>`;
+    }
+    
+    return html;
+}
+
+/**
+ * Initializes post filtering functionality
+ */
 function initPostFiltering() {
-  const filterButtons = document.querySelectorAll('.filter-btn');
-  
-  filterButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const filter = this.dataset.filter;
-      
-      // Toggle active class on buttons
-      filterButtons.forEach(btn => btn.classList.remove('active'));
-      this.classList.add('active');
-      
-      // Apply filtering
-      currentFilter = filter;
-      applyFilter(filter);
-      
-      // Reset to first page when changing filters
-      currentPage = 1;
-      displayPostsPage(currentPage);
-      updatePaginationControls();
+    const filterButtons = getElements('.filter-btn');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            
+            // Update active state
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Apply filter
+            STATE.currentFilter = filter;
+            applyFilter(filter);
+            
+            // Reset to first page
+            STATE.currentPage = 1;
+            displayPostsPage(STATE.currentPage);
+            updatePaginationControls();
+        });
     });
-  });
 }
 
-// Apply filter to posts
+/**
+ * Applies filter to posts
+ * @param {string} filter - Filter value to apply
+ */
 function applyFilter(filter) {
     if (filter === 'all') {
-      filteredPosts = [...allPosts];
+        STATE.filteredPosts = [...STATE.allPosts];
     } else {
-      filteredPosts = allPosts.filter(post => 
-        // Check if any tag matches the filter
-        post.tags && post.tags.includes(filter)
-      );
+        STATE.filteredPosts = STATE.allPosts.filter(post => 
+            post.tags?.includes(filter)
+        );
     }
-  }
+}
 
-// Add event listeners for pagination and initialize
-document.addEventListener('DOMContentLoaded', function() {
-  // Load initial posts
-  if (document.getElementById('posts-container')) {
-    loadPosts();
-  }
-  
-  // Previous page button
-  const prevButton = document.getElementById('prev-page');
-  if (prevButton) {
-    prevButton.addEventListener('click', function() {
-      if (currentPage > 1) {
-        currentPage--;
-        displayPostsPage(currentPage);
-        updatePaginationControls();
-        // Scroll to top of posts section
-        document.querySelector('.news-feed').scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  }
-  
-  // Next page button
-  const nextButton = document.getElementById('next-page');
-  if (nextButton) {
-    nextButton.addEventListener('click', function() {
-      const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-      if (currentPage < totalPages) {
-        currentPage++;
-        displayPostsPage(currentPage);
-        updatePaginationControls();
-        // Scroll to top of posts section
-        document.querySelector('.news-feed').scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  }
+/**
+ * Scrolls to a specific section smoothly
+ * @param {string} selector - CSS selector for target section
+ */
+function scrollToSection(selector) {
+    const section = getElement(selector);
+    if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+    }
+}
 
-  // Rest of your initialization code...
-});
-// ===== CONTACT FORM VALIDATION =====
+// ═══════════════════════════════════════════════════════════════════════════
+// 7. FORM VALIDATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Shows validation error message
+ * @param {HTMLElement} input - Input element with error
+ * @param {string} message - Error message to display
+ */
+function showError(input, message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.style.cssText = 'color: #0091BE; font-size: 0.8rem; margin-top: 5px;';
+    errorDiv.textContent = message;
+    
+    input.parentElement.appendChild(errorDiv);
+}
 
 /**
  * Initializes contact form validation
  */
 function initContactFormValidation() {
-    const contactForm = document.getElementById('contactForm');
-    if (!contactForm) return;
+    const form = getElement(SELECTORS.CONTACT_FORM);
+    if (!form) return;
     
-    contactForm.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function(event) {
         let isValid = true;
         
-        // Get form fields
-        const nameInput = document.getElementById('name');
-        const emailInput = document.getElementById('email');
-        const messageInput = document.getElementById('message');
+        // Clear previous errors
+        getElements('.error-message').forEach(el => el.remove());
         
-        // Clear previous error messages
-        const errorElements = document.querySelectorAll('.error-message');
-        errorElements.forEach(el => el.remove());
+        // Validate fields
+        const fields = {
+            name: { element: getElement('#name'), message: 'Name is required' },
+            email: { element: getElement('#email'), message: 'Valid email is required' },
+            message: { element: getElement('#message'), message: 'Message is required' }
+        };
         
-        // Validate name (required)
-        if (nameInput.value.trim() === '') {
-            showError(nameInput, 'Name is required');
-            isValid = false;
-        }
-        
-        // Validate email (required and format)
-        if (emailInput.value.trim() === '') {
-            showError(emailInput, 'Email is required');
-            isValid = false;
-        } else if (!isValidEmail(emailInput.value)) {
-            showError(emailInput, 'Please enter a valid email');
-            isValid = false;
-        }
-        
-        // Validate message (required)
-        if (messageInput.value.trim() === '') {
-            showError(messageInput, 'Message is required');
-            isValid = false;
-        }
+        // Check each field
+        Object.entries(fields).forEach(([key, field]) => {
+            if (!field.element) return;
+            
+            const value = field.element.value.trim();
+            
+            if (!value) {
+                showError(field.element, field.message);
+                isValid = false;
+            } else if (key === 'email' && !isValidEmail(value)) {
+                showError(field.element, 'Please enter a valid email');
+                isValid = false;
+            }
+        });
         
         if (!isValid) {
             event.preventDefault();
         }
     });
-    
-    // Helper functions for form validation
-    function showError(input, message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.style.color = '#0091BE';
-        errorDiv.style.fontSize = '0.8rem';
-        errorDiv.style.marginTop = '5px';
-        errorDiv.textContent = message;
-        
-        const parent = input.parentElement;
-        parent.appendChild(errorDiv);
-    }
-    
-    function isValidEmail(email) {
-        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        return re.test(email.toLowerCase());
-    }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// 8. CONTENT LOADING
+// ═══════════════════════════════════════════════════════════════════════════
 
+/**
+ * Loads site variables from JSON file
+ */
 async function loadSiteVariables() {
     try {
-        // For post pages, we need to go up two directories
         const variablesPath = isPostPage() ? '../../variables.json' : 'variables.json';
         const response = await fetch(variablesPath);
-
-        if (!response.ok) {
-            throw new Error('Failed to load site variables');
-        }
+        
+        if (!response.ok) throw new Error('Failed to load variables');
         
         const variables = await response.json();
         
-        // Find all elements with data-variable attribute
-        document.querySelectorAll('[data-variable]').forEach(element => {
-            const variableName = element.getAttribute('data-variable');
-            
-            // Handle nested properties like "socialLinks.twitter"
-            if (variableName.includes('.')) {
-                const parts = variableName.split('.');
-                let value = variables;
-                for (const part of parts) {
-                    if (value && value[part] !== undefined) {
-                        value = value[part];
-                    } else {
-                        value = null;
-                        break;
-                    }
-                }
-                if (value !== null) {
-                    element.textContent = value;
-                }
-            } 
-            // Handle simple properties
-            else if (variables[variableName] !== undefined) {
-                element.textContent = variables[variableName];
-            }
-        });
-        
-        // Handle link href attributes
-        document.querySelectorAll('[data-variable-href]').forEach(element => {
-            const variableName = element.getAttribute('data-variable-href');
-            if (variableName.includes('.')) {
-                const parts = variableName.split('.');
-                let value = variables;
-                for (const part of parts) {
-                    if (value && value[part] !== undefined) {
-                        value = value[part];
-                    } else {
-                        value = null;
-                        break;
-                    }
-                }
-                if (value !== null) {
-                    element.href = value;
-                }
-            } else if (variables[variableName] !== undefined) {
-                element.href = variables[variableName];
-            }
-        });
+        // Apply variables to elements
+        applyVariables(variables);
         
     } catch (error) {
         console.error('Error loading site variables:', error);
     }
 }
-  
 
+/**
+ * Applies variables to DOM elements
+ * @param {Object} variables - Variables object
+ */
+function applyVariables(variables) {
+    // Handle text content
+    getElements('[data-variable]').forEach(element => {
+        const variableName = element.getAttribute('data-variable');
+        const value = getNestedValue(variables, variableName);
+        
+        if (value !== null) {
+            element.textContent = value;
+        }
+    });
+    
+    // Handle href attributes
+    getElements('[data-variable-href]').forEach(element => {
+        const variableName = element.getAttribute('data-variable-href');
+        const value = getNestedValue(variables, variableName);
+        
+        if (value !== null) {
+            element.href = value;
+        }
+    });
+}
 
+/**
+ * Gets nested object value using dot notation
+ * @param {Object} obj - Object to search
+ * @param {string} path - Dot-separated path
+ * @returns {*} Value at path or null
+ */
+function getNestedValue(obj, path) {
+    const parts = path.split('.');
+    let value = obj;
+    
+    for (const part of parts) {
+        if (value && value[part] !== undefined) {
+            value = value[part];
+        } else {
+            return null;
+        }
+    }
+    
+    return value;
+}
+
+/**
+ * Loads and renders markdown content for posts
+ */
 async function loadMarkdownContent() {
-    const postContent = document.querySelector('.post-content');
+    const postContent = getElement(SELECTORS.POST_CONTENT);
     if (!postContent) return;
     
-    // Get the current path and extract folder name
-    const currentPath = window.location.pathname;
-    const folderParts = currentPath.split('/').filter(part => part !== '');
-    const postFolderName = folderParts[folderParts.length - 2]; // -2 because last part is index.html
-    
     try {
-        // Since we're inside /posts/[post-folder]/index.html, we need to go up two levels
-        const postsJsonPath = '../../posts/posts.json';
-        // console.log('Loading posts.json from:', postsJsonPath);
+        // Extract post folder from URL
+        const pathParts = window.location.pathname.split('/').filter(Boolean);
+        const postFolder = pathParts[pathParts.length - 2];
         
-        // Fetch posts.json to get the markdown filename
-        const postsResponse = await fetch(postsJsonPath);
-        if (!postsResponse.ok) {
-            throw new Error(`Failed to load posts.json: ${postsResponse.status}`);
-        }
+        // Load posts.json to get markdown filename
+        const postsResponse = await fetch('../../posts/posts.json');
+        if (!postsResponse.ok) throw new Error('Failed to load posts.json');
         
         const posts = await postsResponse.json();
-        const currentPost = posts.find(post => post.folder === postFolderName);
+        const currentPost = posts.find(post => post.folder === postFolder);
         
-        if (!currentPost || !currentPost.md_file_name) {
-            throw new Error(`No markdown file specified for post: ${postFolderName}`);
+        if (!currentPost?.md_file_name) {
+            throw new Error(`No markdown file for post: ${postFolder}`);
         }
         
-        // Load the markdown file from the same directory as index.html
-        const markdownPath = currentPost.md_file_name + ".md";
-        // console.log('Loading markdown from:', markdownPath);
-        
-        const markdownResponse = await fetch(markdownPath);
-        if (!markdownResponse.ok) {
-            throw new Error(`Failed to load markdown: ${markdownResponse.status}`);
-        }
+        // Load markdown file
+        const markdownResponse = await fetch(`${currentPost.md_file_name}.md`);
+        if (!markdownResponse.ok) throw new Error('Failed to load markdown');
         
         const markdown = await markdownResponse.text();
         
-        // Process the markdown content to protect LaTeX
-        let processedMarkdown = markdown
-            .replace(/\$\$([\s\S]*?)\$\$/g, match => '<!--MATH_DISPLAY:' + btoa(match) + '-->')
-            .replace(/\$([\s\S]*?)\$/g, match => '<!--MATH_INLINE:' + btoa(match) + '-->');
-        
-        // Parse markdown and restore LaTeX
-        let html = marked.parse(processedMarkdown);
-        html = html
-            .replace(/<!--MATH_DISPLAY:(.*?)-->/g, (match, p1) => atob(p1))
-            .replace(/<!--MATH_INLINE:(.*?)-->/g, (match, p1) => atob(p1));
-        
-        // Update content
-        postContent.innerHTML = html;
-        
-        // Process MathJax
-        if (window.MathJax && typeof MathJax.typeset === 'function') {
-            MathJax.typeset();
-        }
+        // Process and render markdown
+        renderMarkdown(postContent, markdown);
         
     } catch (error) {
-        console.error('Error loading markdown content:', error);
+        console.error('Error loading markdown:', error);
         postContent.innerHTML = '<p>Error loading content. Please try again later.</p>';
     }
 }
+
+/**
+ * Processes and renders markdown content
+ * @param {HTMLElement} container - Container element
+ * @param {string} markdown - Markdown content
+ */
+function renderMarkdown(container, markdown) {
+    // Protect LaTeX from markdown parser
+    const processedMarkdown = markdown
+        .replace(/\$\$([\s\S]*?)\$\$/g, match => '<!--MATH_DISPLAY:' + btoa(match) + '-->')
+        .replace(/\$([\s\S]*?)\$/g, match => '<!--MATH_INLINE:' + btoa(match) + '-->');
+    
+    // Parse markdown
+    let html = marked.parse(processedMarkdown);
+    
+    // Restore LaTeX
+    html = html
+        .replace(/<!--MATH_DISPLAY:(.*?)-->/g, (_, p1) => atob(p1))
+        .replace(/<!--MATH_INLINE:(.*?)-->/g, (_, p1) => atob(p1));
+    
+    // Update content
+    container.innerHTML = html;
+    
+    // Trigger MathJax rendering
+    if (window.MathJax?.typeset) {
+        MathJax.typeset();
+    }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// 9. INITIALIZATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Sets up pagination button event listeners
+ */
+function initPaginationButtons() {
+    const prevButton = getElement(SELECTORS.PAGINATION.PREV);
+    const nextButton = getElement(SELECTORS.PAGINATION.NEXT);
+    
+    if (prevButton) {
+        prevButton.addEventListener('click', () => {
+            if (STATE.currentPage > 1) {
+                STATE.currentPage--;
+                displayPostsPage(STATE.currentPage);
+                updatePaginationControls();
+                scrollToSection('.news-feed');
+            }
+        });
+    }
+    
+    if (nextButton) {
+        nextButton.addEventListener('click', () => {
+            const totalPages = Math.ceil(STATE.filteredPosts.length / CONFIG.POSTS_PER_PAGE);
+            if (STATE.currentPage < totalPages) {
+                STATE.currentPage++;
+                displayPostsPage(STATE.currentPage);
+                updatePaginationControls();
+                scrollToSection('.news-feed');
+            }
+        });
+    }
+}
+
+/**
+ * Main initialization function
+ */
+function init() {
+    // Load page components
+    loadHeader();
+    loadFooter();
+    loadSiteVariables();
+    
+    // Initialize features based on page elements
+    if (getElement(SELECTORS.SLIDER.CONTAINER)) {
+        initMinimalSlider();
+    }
+    
+    if (getElement(SELECTORS.NEWS_FILTER)) {
+        initPostFiltering();
+    }
+    
+    if (getElement(SELECTORS.CONTACT_FORM)) {
+        initContactFormValidation();
+    }
+    
+    if (getElement(SELECTORS.POSTS_CONTAINER)) {
+        loadPosts();
+        initPaginationButtons();
+    }
+    
+    if (getElement(SELECTORS.POST_CONTENT)) {
+        loadMarkdownContent();
+    }
+}
+
+// Start initialization when DOM is ready
+document.addEventListener('DOMContentLoaded', init);
