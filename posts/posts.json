@@ -2,6 +2,19 @@
 [
 
     {
+        "id": "post_2025_06_04",
+        "folder": "post_2025_06_04",
+        "index_file_name": "index_2025_06_04",
+        "md_file_name": "content_2025_06_04",
+        "title": "Participation of the QUANTOS Team at OFS-29",
+        "date": "June 4, 2025",
+        "postType": "News",
+        "excerpt": "From May 25 to 30 in Porto, the QUANTOS team presented three cutting-edge studies on fiber-optic sensing at OFS-29. The work showcased advancements in LIBS for cultural heritage, high-frequency speckle interrogation, and Fisher-optimized polarimetric sensing.",
+        "tags": ["news", "highlight"],
+        "author": "Catarina Monteiro"
+    },
+
+    {
         "id": "post_2025_04_01",
         "folder": "post_2025_04_01",
         "index_file_name": "index_2025_04_01",
