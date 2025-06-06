@@ -42,11 +42,7 @@ const SELECTORS = {
     POST_CONTENT: '.post-content',
     NEWS_FILTER: '.news-filter',
     FILTER_BTN: '.filter-btn',
-    
-    // Forms
-    CONTACT_FORM: '#contactForm',
-    ERROR_MESSAGE: '.error-message',
-    
+
     // Slider
     SLIDER: {
         CONTAINER: '#minimal-slides-container',
@@ -886,11 +882,7 @@ function init() {
     if (getElement(SELECTORS.NEWS_FILTER)) {
         initPostFiltering();
     }
-    
-    if (getElement(SELECTORS.CONTACT_FORM)) {
-        initContactFormValidation();
-    }
-    
+
     if (getElement(SELECTORS.POSTS_CONTAINER)) {
         loadPosts();
         initPaginationButtons();
