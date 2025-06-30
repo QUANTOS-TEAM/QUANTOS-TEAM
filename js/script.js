@@ -368,6 +368,12 @@ function initDarkModeToggle() {
  * @returns {HTMLElement} Slide element
  */
 function createSlide(post) {
+    const href = post.external_url
+        ? post.external_url
+        : `posts/${post.folder}/${post.index_file_name}.html`;
+    const target = post.external_url ? ' target="_blank" rel="noopener"' : '';
+
+
     const slide = document.createElement('div');
     slide.className = 'minimal-slide';
     
@@ -376,7 +382,7 @@ function createSlide(post) {
             <span class="post-type">${post.postType}</span>
             <h3>${post.title}</h3>
             <p>${post.excerpt}</p>
-            <a href="posts/${post.folder}/${post.index_file_name}.html" class="btn">Read More</a>
+            <a href="${href}" class="btn"${target}>Read More</a>
         </div>
         <div class="minimal-slide-image">
             <img src="posts/${post.folder}/thumbnail.png" alt="${post.title}">
@@ -535,6 +541,11 @@ async function initMinimalSlider() {
  * @returns {string} Post card HTML
  */
 function createPostCard(post) {
+    const href = post.external_url
+        ? post.external_url
+        : `posts/${post.folder}/${post.index_file_name}.html`;
+    const target = post.external_url ? ' target="_blank" rel="noopener"' : '';
+
     return `
         <div class="post-card" data-post="${post.tags?.[0] || ''}">
             <div class="post-image">
@@ -545,7 +556,7 @@ function createPostCard(post) {
                 <h3 class="post-title">${post.title}</h3>
                 <p class="post-date">${post.date}</p>
                 <p class="post-excerpt">${post.excerpt}</p>
-                <a href="posts/${post.folder}/${post.index_file_name}.html" class="btn">Read More</a>
+                <a href="${href}" class="btn"${target}>Read More</a>
             </div>
         </div>
     `;
