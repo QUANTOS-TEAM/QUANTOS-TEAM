@@ -1,6 +1,19 @@
 
 [
 
+    {
+        "id": "post_2025_07_02",
+        "folder": "post_2025_07_02",
+        "index_file_name": "index_2025_07_02",
+        "md_file_name": "content_2025_07_02",
+        "title": "QUANTOS at CLEO®/Europe-EQEC",
+        "date": "July 2, 2025",
+        "postType": "News",
+        "excerpt": "The Quantos team presented three works at the CLEO®/Europe-EQEC, held June 23 - 27, at ICM – International Congress Center of Messe München, Germany.",
+        "tags": ["news"],
+        "author": "Catarina Monteiro"
+    },
+
        {
         "id": "post_2025_06_30",
         "folder": "post_2025_06_30",
