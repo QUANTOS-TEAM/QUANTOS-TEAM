@@ -22,7 +22,7 @@
 // ═══════════════════════════════════════════════════════════════════════════
 
 const CONFIG = {
-    POSTS_PER_PAGE: 12,
+    POSTS_PER_PAGE: 6,
     SLIDER_INTERVAL: 5000,
     ANIMATION_DURATION: 300,
     MOBILE_BREAKPOINT: 768,
