@@ -2,6 +2,19 @@
 [
 
     {
+        "id": "post_2025_07_11",
+        "folder": "post_2025_07_11",
+        "index_file_name": "index_2025_07_11",
+        "md_file_name": "content_2025_07_11",
+        "title": "QUANTOS PhD student Diana Capela wins ESP Young Minds poster award",
+        "date": "July 11, 2025",
+        "postType": "News",
+        "excerpt": "Diana Capela, a PhD researcher at INESC TEC, was awarded the PhD Best Poster Award at the ESP Young Minds U. Porto Poster Contest 2025 for her work titled: Fiber Laser LIBS as a Sensing Tool for Chemical Mapping of Heritage Tiles.",
+        "tags": ["news", "highlight"],
+        "author": "Catarina Monteiro"
+    },
+
+    {
         "id": "post_2025_07_02",
         "folder": "post_2025_07_02",
         "index_file_name": "index_2025_07_02",
@@ -76,7 +89,7 @@
         "date": "December 13, 2024",
         "postType": "News",
         "excerpt": "The imaging team has recently published a paper in the renowned scientific journal Physical Review Letter that explores the next generation of analogue simulations with paraxial fluids of light.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Tiago D. Ferreira"
     }
 
