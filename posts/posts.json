@@ -2,6 +2,19 @@
 [
 
     {
+        "id": "post_2025_07_30",
+        "folder": "post_2025_07_30",
+        "index_file_name": "index_2025_07_30",
+        "md_file_name": "content_2025_07_30",
+        "title": "QUANTOS at Colloquium Spectroscopicum Internationale",
+        "date": "July 30, 2025",
+        "postType": "News",
+        "excerpt": "At CSI XLIV in Ulm, Germany (July 27–31, 2025), Diana Guimarães was an invited speaker and presented the work entitled “Spectral Imaging Applications for Industrial Settings,” showcasing how LIBS, Raman, and hyperspectral imaging support real-time industrial decision-making.",
+        "tags": ["news", "highlight"],
+        "author": "Diana Guimarães"
+    },
+
+    {
         "id": "post_2025_07_11",
         "folder": "post_2025_07_11",
         "index_file_name": "index_2025_07_11",
@@ -23,7 +36,7 @@
         "date": "July 2, 2025",
         "postType": "News",
         "excerpt": "The Quantos team presented three works at the CLEO®/Europe-EQEC, held June 23 - 27, at ICM – International Congress Center of Messe München, Germany.",
-        "tags": ["news"],
+        "tags": ["news", "highlight"],
         "author": "Catarina Monteiro"
     },
 
@@ -50,7 +63,7 @@
         "date": "June 12, 2025",
         "postType": "News",
         "excerpt": "New paper published in Applied Sciences: Beyond Human Vision: Unlocking the Potential of Augmented Reality for Spectral Imaging",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Nuno Silva"
     },
 
