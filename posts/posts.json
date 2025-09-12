@@ -1,5 +1,17 @@
 
 [
+    {
+        "id": "post_2025_09_12",
+        "folder": "post_2025_09_12",
+        "index_file_name": "index_2025_09_12",
+        "md_file_name": "content_2025_09_12",
+        "title": "QUANTOS at AMACEE",
+        "date": "September 12, 2025",
+        "postType": "News",
+        "excerpt": "From August 26th to 28th, 2025, the QUANTOS team participated in the 5th International Symposium on Advanced Measurement, Analysis, and Control for Energy and Environment (AMACEE), held in Brno, Czech Republic.",
+        "tags": ["news", "highlight"],
+        "author": "Rafael Cavaco"
+    },
 
     {
         "id": "post_2025_07_30",
@@ -76,7 +88,7 @@
         "date": "June 4, 2025",
         "postType": "News",
         "excerpt": "From May 25 to 30 in Porto, the QUANTOS team presented three cutting-edge studies on fiber-optic sensing at OFS-29. The work showcased advancements in LIBS for cultural heritage, high-frequency speckle interrogation, and Fisher-optimized polarimetric sensing.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Catarina Monteiro"
     },
 
