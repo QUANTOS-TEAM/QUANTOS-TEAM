@@ -1,5 +1,22 @@
 
 [
+
+   
+
+    {
+        "id": "post_2025_09_19",
+        "folder": "post_2025_09_19",
+        "index_file_name": "",
+        "md_file_name": "",
+        "title": "A prototype quantum camera capable of making the invisible visible is being developed at QUANTOS Research Team",
+        "date": "September 19, 2025",
+        "postType": "News from INESC TEC",
+        "excerpt": "A team of researchers at INESC TEC, is developing a prototype of a quantum camera capable of seeing the invisible.",
+        "tags": ["from_inesctec_news", "highlight"],
+        "author": "The Team",
+        "external_url": "https://bip.inesctec.pt/en/noticias/a-prototype-quantum-camera-capable-of-making-the-invisible-visible-is-being-developed-by-inesc-tec"
+    },
+
     {
         "id": "post_2025_09_12",
         "folder": "post_2025_09_12",
@@ -35,7 +52,7 @@
         "date": "July 11, 2025",
         "postType": "News",
         "excerpt": "Diana Capela, a PhD researcher at INESC TEC, was awarded the PhD Best Poster Award at the ESP Young Minds U. Porto Poster Contest 2025 for her work titled: Fiber Laser LIBS as a Sensing Tool for Chemical Mapping of Heritage Tiles.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Catarina Monteiro"
     },
 
@@ -48,11 +65,11 @@
         "date": "July 2, 2025",
         "postType": "News",
         "excerpt": "The Quantos team presented three works at the CLEO®/Europe-EQEC, held June 23 - 27, at ICM – International Congress Center of Messe München, Germany.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Catarina Monteiro"
     },
 
-       {
+    {
         "id": "post_2025_06_30",
         "folder": "post_2025_06_30",
         "index_file_name": "",
