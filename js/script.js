@@ -867,6 +867,7 @@ function renderMarkdown(container, markdown) {
     if (window.MathJax?.typeset) {
         MathJax.typeset();
     }
+
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
