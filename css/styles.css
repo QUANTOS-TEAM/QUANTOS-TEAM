@@ -558,7 +558,7 @@ main {
 
 .post-content {
   font-size: 1.125rem;
-  max-width: 800px;
+  max-width: min(90%, 1200px);
   margin: 0 auto;
   line-height: 1.7;
   margin-bottom: 3rem;
