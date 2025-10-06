@@ -1,5 +1,17 @@
 
-[
+[   
+    {
+        "id": "post_2025_10_06",
+        "folder": "post_2025_10_06",
+        "index_file_name": "index_2025_10_06",
+        "md_file_name": "content_2025_10_06",
+        "title": "QUANTOS Visits CEITEC to Advance Lithium and Rare-Earth Mineral Studies",
+        "date": "October 10, 2025",
+        "postType": "News",
+        "excerpt": "On August 25th, 2025, researchers from INESC TEC and QUANTOS Diana Guimarães, Rafael Cavaco, Diana Capela, and Pedro Jorge , visited CEITEC’s LIBSLab in Brno, Czech Republic, within the framework of the EXCITE Transnational Access Project.",
+        "tags": ["news", "highlight"],
+        "author": "Diana Guimarães"
+    },
 
     {
         "id": "post_2025_09_30",
