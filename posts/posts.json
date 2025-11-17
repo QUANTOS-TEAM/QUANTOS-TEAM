@@ -35,7 +35,7 @@
         "date": "September 30, 2025",
         "postType": "News",
         "excerpt": "Our team has published a new paper in Optics Letters: High-precision acoustic event monitoring in single-mode fibers using Fisher information",
-        "tags": ["news", "highlight"],
+        "tags": ["news", "tutorial", "highlight"],
         "author": "Tiago Ferreira"
     },
 
