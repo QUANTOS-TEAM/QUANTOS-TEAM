@@ -1,6 +1,19 @@
 
 [   
     {
+        "id": "post_2025_12_18",
+        "folder": "post_2025_12_18",
+        "index_file_name": "index_2025_12_18",
+        "md_file_name": "content_2025_12_18",
+        "title": "QUANTOS team wins EIT Jumpstarter 2025",
+        "date": "November 11, 2025",
+        "postType": "News",
+        "excerpt": "The QUANTOS team highlights its participation in the EIT Jumpstarter 2025, where its spin-off initiative, ProSpec, was awarded 1st Prize in the Raw Materials category at the EIT Innovation Awards.",
+        "tags": ["news", "highlight"],
+        "author": "Tomás Lopes"
+    },
+
+    {
         "id": "post_2025_11_11",
         "folder": "post_2025_11_11",
         "index_file_name": "index_2025_11_11",
@@ -35,7 +48,7 @@
         "date": "September 30, 2025",
         "postType": "News",
         "excerpt": "Our team has published a new paper in Optics Letters: High-precision acoustic event monitoring in single-mode fibers using Fisher information",
-        "tags": ["news", "tutorial", "highlight"],
+        "tags": ["news", "tutorial"],
         "author": "Tiago Ferreira"
     },
 
