@@ -985,7 +985,31 @@ section[align-items="center"] img {
   margin-bottom: 0.5rem;
   font-size: 240px !important;
   color: #555;
+  margin-top: 0.75rem;
+  color: #666;
+  font-style: italic;
+  font-size: 0.95rem;
 }
+
+.about-figure {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.about-figure figure {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.about-figure figure img {
+  width: 100%;
+  border-radius: 8px;
+  height: auto;
+}
+
 
 /* ═══════════════════════════════════════════════════════════════════════════
    18. CONTACT PAGE
