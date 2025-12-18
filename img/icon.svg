@@ -1,7 +1,28 @@
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools -->
-<svg width="64px" height="64px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="#0091BE">
-<g id="SVGRepo_bgCarrier" stroke-width="0"/>
-<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
-<g id="SVGRepo_iconCarrier"> <defs> <style>.cls-1{fill:#0091BE;}.cls-2{fill:#007399;}.cls-3{fill:#0091BE;}</style> </defs> <title>Icon_24px_QuantamEngine_Color</title> <g data-name="Product Icons"> <rect class="cls-1" x="7.01" y="2" width="2" height="3"/> <rect class="cls-1" x="11.01" y="2" width="2" height="3"/> <rect class="cls-1" x="15.01" y="2" width="2" height="3"/> <rect class="cls-2" x="7.01" y="19" width="2" height="3"/> <rect class="cls-2" x="11.01" y="19" width="2" height="3"/> <rect class="cls-2" x="15.01" y="19" width="2" height="3"/> <rect class="cls-2" x="19" y="15" width="3" height="2"/> <rect class="cls-2" x="19" y="11" width="3" height="2"/> <rect class="cls-2" x="19" y="7" width="3" height="2"/> <rect class="cls-1" x="2" y="15" width="3" height="2"/> <rect class="cls-1" x="2" y="11" width="3" height="2"/> <rect class="cls-1" x="2" y="7" width="3" height="2"/> <g data-name="colored-32/quantum-engine"> <g> <path class="cls-3" d="M11,13H9V7H7v8h4v3h2V15h4V7H15v6H13V6H11ZM4,20V4H20V20Z"/> </g> </g> </g> </g>
-</svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="224px" height="224px" viewBox="0 0 224 224" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icone_quantos_sem_fundo@1.5x</title>
+    <defs>
+        <path d="M0,0 L224,0 L224,224 L0,224 L0,0 Z" id="path-1"></path>
+        <circle id="path-2" cx="66" cy="66" r="66"></circle>
+        <filter x="-2.7%" y="-4.9%" width="108.3%" height="108.3%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="2" dy="-1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feMorphology radius="18.0287929" operator="erode" in="SourceAlpha" result="shadowInner"></feMorphology>
+            <feOffset dx="2" dy="-1" in="shadowInner" result="shadowInner"></feOffset>
+            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"></feComposite>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.25 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="icone_quantos_sem_fundo" stroke="none" fill="none" xlink:href="#path-1" fill-rule="evenodd" stroke-width="1">
+        <g id="Group" transform="translate(46, 44)">
+            <g id="Group-Copy-2">
+                <g id="Oval">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                    <circle stroke="#0091BE" stroke-width="18.0287929" stroke-linejoin="square" cx="66" cy="66" r="56.9856035"></circle>
+                </g>
+                <line x1="107.66113" y1="106.267996" x2="128.47619" y2="127.083056" id="Line" stroke="#0091BE" stroke-width="18.798334" stroke-linecap="square"></line>
+            </g>
+            <ellipse id="Oval-2-Copy-7" fill="#63C7EA" cx="65.9589552" cy="65.9589552" rx="17.9878184" ry="18.0287929"></ellipse>
+        </g>
+    </g>
+</svg>
