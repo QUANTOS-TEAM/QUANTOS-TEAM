@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800px" height="224px" viewBox="0 0 800 224" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>logo_quantos_sem_fundo@1.5x</title>
+    <defs>
+        <path d="M0,0 L800,0 L800,224 L0,224 L0,0 Z" id="path-1"></path>
+        <circle id="path-2" cx="66" cy="66" r="66"></circle>
+        <filter x="-2.7%" y="-4.9%" width="108.3%" height="108.3%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="2" dy="-1" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feMorphology radius="18.0287929" operator="erode" in="SourceAlpha" result="shadowInner"></feMorphology>
+            <feOffset dx="2" dy="-1" in="shadowInner" result="shadowInner"></feOffset>
+            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"></feComposite>
+            <feGaussianBlur stdDeviation="1.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.25 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="logo_quantos_sem_fundo" stroke="none" fill="none" xlink:href="#path-1" fill-rule="evenodd" stroke-width="1">
+        <g id="Group" transform="translate(45, 32)">
+            <text id="uantos-copy-2" fill-rule="nonzero" font-family="Gilroy-SemiBold" font-size="148.019323" font-weight="normal" letter-spacing="5.638831" fill="#63C7EA">
+                <tspan x="150.880802" y="115">uantos</tspan>
+            </text>
+            <g id="Group-Copy-2" transform="translate(0, 12)">
+                <g id="Oval">
+                    <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-2"></use>
+                    <circle stroke="#0091BE" stroke-width="18.0287929" stroke-linejoin="square" cx="66" cy="66" r="56.9856035"></circle>
+                </g>
+                <line x1="107.66113" y1="106.267996" x2="128.47619" y2="127.083056" id="Line" stroke="#0091BE" stroke-width="18.798334" stroke-linecap="square"></line>
+            </g>
+            <ellipse id="Oval-2-Copy-7" fill="#63C7EA" cx="65.9589552" cy="77.9589552" rx="17.9878184" ry="18.0287929"></ellipse>
+            <ellipse id="Oval-2-Copy-4" fill="#0091BE" cx="691.958955" cy="96.9589552" rx="17.9878184" ry="18.0287929"></ellipse>
+        </g>
+    </g>
+</svg>
