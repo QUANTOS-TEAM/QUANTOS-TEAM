@@ -1,5 +1,18 @@
 
-[   
+[   {
+        "id": "post_2026_02_09",
+        "folder": "post_2026_02_09",
+        "index_file_name": "index_2026_02_09",
+        "md_file_name": "content_2026_02_09",
+        "title": "QUANTOS at EMSLIBS 2025: International Recognition in Cultural Heritage, Industrial Monitoring, and Data Processing.",
+        "date": "February 09, 2026",
+        "postType": "News",
+        "excerpt": "Researchers from Quantos participated in EMSLIBS 2025 (International Conference on Laser-Induced Breakdown Spectroscopy), held in Senlis, France from 26th to 30th January 2026.",
+        "tags": ["news", "highlight"],
+        "author": "Diana Guimarães"
+    },
+
+
     {
         "id": "post_2025_12_18",
         "folder": "post_2025_12_18",
@@ -61,7 +74,7 @@
         "date": "September 19, 2025",
         "postType": "News from INESC TEC",
         "excerpt": "A team of researchers at INESC TEC, is developing a prototype of a quantum camera capable of seeing the invisible.",
-        "tags": ["from_inesctec_news", "highlight"],
+        "tags": ["from_inesctec_news"],
         "author": "The Team",
         "external_url": "https://bip.inesctec.pt/en/noticias/a-prototype-quantum-camera-capable-of-making-the-invisible-visible-is-being-developed-by-inesc-tec"
     },
