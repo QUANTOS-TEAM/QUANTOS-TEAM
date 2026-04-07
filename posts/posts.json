@@ -1,5 +1,19 @@
 
-[   {
+[   
+    {
+        "id": "post_2026_04_07",
+        "folder": "post_2026_04_07",
+        "index_file_name": "index_2026_04_07",
+        "md_file_name": "content_2026_04_07",
+        "title": "New Paper Published in Sensors: Real-Time Probing of Molecular Affinity Using Optical Tweezers",
+        "date": "April 07, 2026",
+        "postType": "News",
+        "excerpt": "New Paper Published in Sensors: Real-Time Probing of Molecular Affinity Using Optical Tweezers. This work establishes a robust foundation for using optical tweezers-based tools to probe the mechanical and optical changes of biomolecular interactions.",
+        "tags": ["news", "highlight"],
+        "author": "Joana Teixeira"
+    },
+
+    {
         "id": "post_2026_02_09",
         "folder": "post_2026_02_09",
         "index_file_name": "index_2026_02_09",
@@ -35,7 +49,7 @@
         "date": "November 11, 2025",
         "postType": "News",
         "excerpt": "From November 5th to 7th 2025, the QUANTOS team took part in the 9th Spanish and Portuguese Advanced Optical Microscopy Meeting (SPAOM), which took place in Braga, Portugal.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Carolina Gonçalves"
     },
 
@@ -48,7 +62,7 @@
         "date": "October 10, 2025",
         "postType": "News",
         "excerpt": "On August 25th, 2025, researchers from INESC TEC and QUANTOS Diana Guimarães, Rafael Cavaco, Diana Capela, and Pedro Jorge , visited CEITEC’s LIBSLab in Brno, Czech Republic, within the framework of the EXCITE Transnational Access Project.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Diana Guimarães"
     },
 
