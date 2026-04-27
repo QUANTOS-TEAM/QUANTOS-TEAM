@@ -1,5 +1,17 @@
 
 [   {
+        "id": "post_2026_04_27",
+        "folder": "post_2026_04_27",
+        "index_file_name": "index_2026_04_27",
+        "md_file_name": "content_2026_04_27",
+        "title": "QUANTOS team members at SPIE Photonics Europe 2026",
+        "date": "April 27, 2026",
+        "postType": "News",
+        "excerpt": "From April 12th to 16th, 2026, QUANTOS team members Joana Teixeira and Tomás Lopes participated in SPIE Photonics Europe, held in Strasbourg, France.",
+        "tags": ["news", "highlight"],
+        "author": "Joana Teixeira"
+    },
+    {
         "id": "post_2026_04_20",
         "folder": "post_2026_04_20",
         "index_file_name": "index_2026_04_20",
@@ -33,7 +45,7 @@
         "date": "February 09, 2026",
         "postType": "News",
         "excerpt": "Researchers from Quantos participated in EMSLIBS 2025 (International Conference on Laser-Induced Breakdown Spectroscopy), held in Senlis, France from 26th to 30th January 2026.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Diana Guimarães"
     },
 
@@ -47,7 +59,7 @@
         "date": "November 11, 2025",
         "postType": "News",
         "excerpt": "The QUANTOS team highlights its participation in the EIT Jumpstarter 2025, where its spin-off initiative, ProSpec, was awarded 1st Prize in the Raw Materials category at the EIT Innovation Awards.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Tomás Lopes"
     },
 
