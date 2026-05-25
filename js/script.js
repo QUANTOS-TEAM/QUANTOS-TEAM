@@ -74,6 +74,12 @@ const SELECTORS = {
     PROJECTS_CONTAINER: '#projects-container',
     PROJECT_DETAIL_CONTAINER: '#project-detail-container',
     PROJECT_MARKDOWN_CONTENT: '.project-markdown-content',
+
+    // Project page
+    ALL_PROJECTS_CONTAINER: '#all-projects-container',
+    PROJECTS_RESULTS_COUNT: '#projects-results-count',
+    PROJECTS_LAB_FILTERS: '#projects-lab-filters',
+    PROJECTS_STATUS_FILTERS: '#projects-status-filters',
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -1319,6 +1325,228 @@ async function insertRelatedPostsGrid(project) {
   `;
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// ALL PROJECTS PAGE FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+const PROJECTS_PAGE_STATE = {
+  projects: [],
+  selectedLab: 'all',
+  selectedStatus: 'all'
+};
+
+function getResearchLineInfo(researchLineId) {
+  const researchLines = {
+    quantum_imaging: {
+      label: 'Quantum Imaging',
+      url: 'quantum_imaging.html'
+    },
+    optical_computing: {
+      label: 'Optical Computing',
+      url: 'optical_computing.html'
+    },
+    paraxial_fluids: {
+      label: 'Paraxial Fluids of Light',
+      url: 'paraxial_fluids_of_light.html'
+    },
+    spectral_imaging: {
+      label: 'Spectral Imaging',
+      url: 'spectral_imaging.html'
+    }
+  };
+
+  return researchLines[researchLineId] || {
+    label: 'Research Line',
+    url: 'research_lines.html'
+  };
+}
+
+function createAllProjectsCard(project) {
+  const researchLine = getResearchLineInfo(project.research_line);
+  const projectStatusLabel = project.status === 'ongoing' ? 'Ongoing' : 'Finished';
+  const projectStatusClass = project.status === 'ongoing'
+    ? 'project-status-ongoing'
+    : 'project-status-finished';
+
+  return `
+    <article class="all-project-card">
+      <a class="all-project-card-image" href="${getProjectUrl(project)}" aria-label="Read more about ${escapeHTML(project.title)}">
+        <img src="${getProjectThumbnailUrl(project)}" alt="${escapeHTML(project.title)} thumbnail" loading="lazy">
+      </a>
+
+      <div class="all-project-card-content">
+        <div class="all-project-card-tags">
+          <span class="project-status ${projectStatusClass}">${projectStatusLabel}</span>
+          <a class="all-project-lab-tag" href="${researchLine.url}">
+            ${escapeHTML(researchLine.label)}
+          </a>
+        </div>
+
+        <h3>
+          <a href="${getProjectUrl(project)}">${escapeHTML(project.title)}</a>
+        </h3>
+
+        ${project.summary ? `<p>${escapeHTML(project.summary)}</p>` : ''}
+
+        <a class="btn all-project-read-more" href="${getProjectUrl(project)}">Read more</a>
+      </div>
+    </article>
+  `;
+}
+
+function sortAllProjects(projects) {
+  return [...projects].sort((a, b) => {
+    const dateA = a.status === 'finished'
+      ? (a.end_date || a.start_date)
+      : a.start_date;
+
+    const dateB = b.status === 'finished'
+      ? (b.end_date || b.start_date)
+      : b.start_date;
+
+    return parseProjectDate(dateB) - parseProjectDate(dateA);
+  });
+}
+
+function getFilteredProjects() {
+  return PROJECTS_PAGE_STATE.projects.filter(project => {
+    const matchesLab =
+      PROJECTS_PAGE_STATE.selectedLab === 'all' ||
+      project.research_line === PROJECTS_PAGE_STATE.selectedLab;
+
+    const matchesStatus =
+      PROJECTS_PAGE_STATE.selectedStatus === 'all' ||
+      project.status === PROJECTS_PAGE_STATE.selectedStatus;
+
+    return matchesLab && matchesStatus;
+  });
+}
+
+function updateProjectsFilterButtons(containerSelector, dataAttribute, activeValue) {
+  const container = getElement(containerSelector);
+  if (!container) return;
+
+  const buttons = container.querySelectorAll('.projects-filter-btn');
+
+  buttons.forEach(button => {
+    const buttonValue = button.dataset[dataAttribute];
+
+    if (buttonValue === activeValue) {
+      button.classList.add('active');
+    } else {
+      button.classList.remove('active');
+    }
+  });
+}
+
+function renderAllProjectsPage() {
+  const container = getElement(SELECTORS.ALL_PROJECTS_CONTAINER);
+  const countElement = getElement(SELECTORS.PROJECTS_RESULTS_COUNT);
+
+  if (!container) return;
+
+  const filteredProjects = sortAllProjects(getFilteredProjects());
+
+  if (countElement) {
+    const projectWord = filteredProjects.length === 1 ? 'project' : 'projects';
+    countElement.textContent = `${filteredProjects.length} ${projectWord} shown`;
+  }
+
+  if (filteredProjects.length === 0) {
+    container.innerHTML = `
+      <div class="projects-empty-state">
+        <h3>No projects found</h3>
+        <p>Try changing the selected research line or status filter.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filteredProjects.map(createAllProjectsCard).join('');
+}
+
+function initProjectsPageFilters() {
+  const labFilters = getElement(SELECTORS.PROJECTS_LAB_FILTERS);
+  const statusFilters = getElement(SELECTORS.PROJECTS_STATUS_FILTERS);
+
+  if (labFilters) {
+    labFilters.addEventListener('click', event => {
+      const button = event.target.closest('[data-lab-filter]');
+      if (!button) return;
+
+      const selectedLab = button.dataset.labFilter;
+
+      /*
+        Only one research lab can be selected at a time.
+        Clicking the already selected lab again returns to All.
+      */
+      PROJECTS_PAGE_STATE.selectedLab =
+        PROJECTS_PAGE_STATE.selectedLab === selectedLab && selectedLab !== 'all'
+          ? 'all'
+          : selectedLab;
+
+      updateProjectsFilterButtons(
+        SELECTORS.PROJECTS_LAB_FILTERS,
+        'labFilter',
+        PROJECTS_PAGE_STATE.selectedLab
+      );
+
+      renderAllProjectsPage();
+    });
+  }
+
+  if (statusFilters) {
+    statusFilters.addEventListener('click', event => {
+      const button = event.target.closest('[data-status-filter]');
+      if (!button) return;
+
+      const selectedStatus = button.dataset.statusFilter;
+
+      /*
+        Only one status is active at a time:
+        All, Ongoing, or Finished.
+        Clicking the active status again returns to All.
+      */
+      PROJECTS_PAGE_STATE.selectedStatus =
+        PROJECTS_PAGE_STATE.selectedStatus === selectedStatus && selectedStatus !== 'all'
+          ? 'all'
+          : selectedStatus;
+
+      updateProjectsFilterButtons(
+        SELECTORS.PROJECTS_STATUS_FILTERS,
+        'statusFilter',
+        PROJECTS_PAGE_STATE.selectedStatus
+      );
+
+      renderAllProjectsPage();
+    });
+  }
+}
+
+async function loadAllProjectsPage() {
+  const container = getElement(SELECTORS.ALL_PROJECTS_CONTAINER);
+  if (!container) return;
+
+  try {
+    const response = await fetch(getRelativeRootPath() + 'projects/projects.json');
+    if (!response.ok) throw new Error('Failed to load projects.json');
+
+    PROJECTS_PAGE_STATE.projects = await response.json();
+
+    initProjectsPageFilters();
+    renderAllProjectsPage();
+  } catch (error) {
+    console.error('Error loading all projects:', error);
+
+    container.innerHTML = `
+      <div class="projects-empty-state">
+        <h3>Projects could not be loaded</h3>
+        <p>Please try again later.</p>
+      </div>
+    `;
+  }
+}
+
 
 // ═══════════════════════════════════════════════════════════════════════════
 // 10. CONTENT LOADING FUNCTIONS
@@ -1475,6 +1703,10 @@ function init() {
     if (getElement(SELECTORS.PROJECT_DETAIL_CONTAINER)) {
         loadProjectPage();
     }
+
+    if (getElement(SELECTORS.ALL_PROJECTS_CONTAINER)) {
+    loadAllProjectsPage();
+  }
 }
 
 // Start initialization when DOM is ready
