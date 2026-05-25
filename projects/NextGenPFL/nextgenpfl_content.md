@@ -30,11 +30,14 @@ The Quantum Fluids of Light Lab team at the Kastler-Brossel Laboratory (LKB) in 
 
 
 
-
 ## Funding
 
 This project was funded by [FCT: Fundação para a Ciência e a Tecnologia](https://www.fct.pt) under the call: [Cooperação Bilateral Portugal-França 2024: concurso conjunto ao abrigo do Programa PESSOA](https://www.fct.pt/en/concursos/cooperacao-bilateral-portugal-franca-2024-concurso-conjunto-ao-abrigo-do-programa-pessoa) with reference: 2024.07025.CBM
 
+
+## Related Posts
+
+<div data-related-posts-grid></div>
 
 
 <!-- ## Outputs

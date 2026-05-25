@@ -6,12 +6,13 @@
         "folder": "post_2026_05_25",
         "index_file_name": "index_2026_05_25",
         "md_file_name": "content_2026_05_25",
-        "title": "QUANTOS Members Visit the Paraxial Fluids of Light Group at Laboratoire Kastler Brossel, Sorbonne University",
+        "title": "QUANTOS Members Visit the Paraxial Fluids of Light Group at Laboratoire Kastler Brossel, Sorbonne University, France.",
         "date": "May 25, 2026",
         "postType": "News",
         "excerpt": "From 18 to 22 May, Tiago Ferreira and Nuno Silva visited the Quantum Fluids of Light group at Laboratoire Kastler Brossel, Sorbonne University, France.",
         "tags": ["news", "highlight"],
-        "author": "Tiago Ferreira"
+        "author": "Tiago Ferreira",
+        "related_projects": ["NextGenPFL"]
     },
 
     {
@@ -37,7 +38,8 @@
         "postType": "News",
         "excerpt": "The QUANTOS team was present in the Quantum Day @PT 2026 conference, held at the Academia de Ciências, in Lisbon, Portugal.",
         "tags": ["news", "highlight"],
-        "author": "Carolina Gonçalves"
+        "author": "Carolina Gonçalves",
+        "related_projects": ["hyperquim"]
     },
 
 
@@ -75,7 +77,7 @@
         "date": "February 09, 2026",
         "postType": "News",
         "excerpt": "Researchers from Quantos participated in EMSLIBS 2025 (International Conference on Laser-Induced Breakdown Spectroscopy), held in Senlis, France from 26th to 30th January 2026.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Diana Guimarães"
     },
 
@@ -103,7 +105,8 @@
         "postType": "News",
         "excerpt": "From November 5th to 7th 2025, the QUANTOS team took part in the 9th Spanish and Portuguese Advanced Optical Microscopy Meeting (SPAOM), which took place in Braga, Portugal.",
         "tags": ["news"],
-        "author": "Carolina Gonçalves"
+        "author": "Carolina Gonçalves",
+        "related_projects": ["hyperquim"]
     },
 
     {
@@ -143,7 +146,8 @@
         "excerpt": "A team of researchers at INESC TEC, is developing a prototype of a quantum camera capable of seeing the invisible.",
         "tags": ["from_inesctec_news"],
         "author": "The Team",
-        "external_url": "https://bip.inesctec.pt/en/noticias/a-prototype-quantum-camera-capable-of-making-the-invisible-visible-is-being-developed-by-inesc-tec"
+        "external_url": "https://bip.inesctec.pt/en/noticias/a-prototype-quantum-camera-capable-of-making-the-invisible-visible-is-being-developed-by-inesc-tec",
+        "related_projects": ["hyperquim"]
     },
 
     {

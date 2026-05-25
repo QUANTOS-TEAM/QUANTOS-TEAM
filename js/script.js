@@ -1217,11 +1217,106 @@ async function loadProjectPage() {
 
     const markdown = await markdownResponse.text();
     renderMarkdown(markdownContainer, markdown);
+    insertRelatedPostsGrid(currentProject);
   } catch (error) {
     console.error('Error loading project page:', error);
     detailContainer.innerHTML = '<p>Error loading project. Please try again later.</p>';
     markdownContainer.innerHTML = '';
   }
+}
+
+async function getRelatedPostsForProject(project) {
+  try {
+    const response = await fetch(getRelativeRootPath() + 'posts/posts.json');
+    if (!response.ok) throw new Error('Failed to load posts.json');
+
+    const posts = await response.json();
+
+    const manuallyRelatedPostIds = Array.isArray(project.related_posts)
+      ? project.related_posts
+      : [];
+
+    const relatedPosts = posts.filter(post => {
+      const postRelatedProjects = Array.isArray(post.related_projects)
+        ? post.related_projects
+        : [];
+
+      const isLinkedFromPost = postRelatedProjects.includes(project.id);
+      const isLinkedFromProject = manuallyRelatedPostIds.includes(post.id);
+
+      return isLinkedFromPost || isLinkedFromProject;
+    });
+
+    return relatedPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
+  } catch (error) {
+    console.error('Error loading related posts:', error);
+    return [];
+  }
+}
+
+function getPostUrl(post) {
+  if (post.external_url) {
+    return post.external_url;
+  }
+
+  return `${getRelativeRootPath()}posts/${post.folder}/${post.index_file_name}.html`;
+}
+
+function getPostThumbnailUrl(post) {
+  if (!post.folder) return '';
+
+  const thumbnail = post.thumbnail || 'thumbnail.png';
+
+  if (thumbnail.startsWith('http')) {
+    return thumbnail;
+  }
+
+  return `${getRelativeRootPath()}posts/${post.folder}/${thumbnail}`;
+}
+
+function createRelatedPostThumbnailCard(post) {
+  const postUrl = getPostUrl(post);
+  const thumbnailUrl = getPostThumbnailUrl(post);
+  const target = post.external_url ? ' target="_blank" rel="noopener"' : '';
+
+  return `
+    <article class="markdown-related-post-card">
+      <a href="${postUrl}"${target}>
+        ${
+          thumbnailUrl
+            ? `<div class="markdown-related-post-image">
+                 <img 
+                   src="${thumbnailUrl}" 
+                   alt="${escapeHTML(post.title)} thumbnail" 
+                   loading="lazy"
+                   onerror="this.closest('.markdown-related-post-image').remove();"
+                 >
+               </div>`
+            : ''
+        }
+
+        <h3>${escapeHTML(post.title)}</h3>
+      </a>
+    </article>
+  `;
+}
+
+async function insertRelatedPostsGrid(project) {
+  const placeholder = document.querySelector('[data-related-posts-grid]');
+  if (!placeholder) return;
+
+  const relatedPosts = await getRelatedPostsForProject(project);
+
+  if (relatedPosts.length === 0) {
+    placeholder.remove();
+    return;
+  }
+
+  placeholder.outerHTML = `
+    <div class="markdown-related-posts-grid">
+      ${relatedPosts.map(createRelatedPostThumbnailCard).join('')}
+    </div>
+  `;
 }
 
 

@@ -46,9 +46,15 @@ iLoF is a digital health company pioneering a breakthrough AI-platform to accele
 Sarspec is an innovative company in the field of fiber-optic spectroscopy.
 
 
+
 ## Funding
 
 This project was funded by [FCT: Fundação para a Ciência e a Tecnologia](https://www.fct.pt) under the call: [Call for Exploratory Research Projects in all Scientific Domains 2024](https://www.fct.pt/en/concursos/concurso-para-projetos-de-investigacao-de-carater-exploratorio-em-todos-os-dominios-cientificos-2024) with DOI: https://doi.org/10.54499/2024.17596.PEX 
+
+
+## Related Posts
+
+<div data-related-posts-grid></div>
 
 
 
