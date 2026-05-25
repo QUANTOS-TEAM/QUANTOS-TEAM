@@ -68,7 +68,12 @@ const SELECTORS = {
     
     // Data attributes
     DATA_VARIABLE: '[data-variable]',
-    DATA_VARIABLE_HREF: '[data-variable-href]'
+    DATA_VARIABLE_HREF: '[data-variable-href]',
+
+    // Projects
+    PROJECTS_CONTAINER: '#projects-container',
+    PROJECT_DETAIL_CONTAINER: '#project-detail-container',
+    PROJECT_MARKDOWN_CONTENT: '.project-markdown-content',
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -131,7 +136,16 @@ const getBasePath = () => {
  * Checks if current page is a post page
  * @returns {boolean} True if on a post page
  */
+
+// const isPostPage = () => window.location.pathname.includes('/posts/');
+
 const isPostPage = () => window.location.pathname.includes('/posts/');
+const isProjectPage = () => window.location.pathname.includes('/projects/');
+const isNestedContentPage = () => isPostPage() || isProjectPage();
+
+const getRelativeRootPath = () => {
+  return isNestedContentPage() ? '../../' : '';
+};
 
 /**
  * Validates email format
@@ -184,21 +198,20 @@ const getNestedValue = (obj, path) => {
  * @param {string} html - HTML content to process
  * @returns {string} Processed HTML with adjusted paths
  */
-const adjustPathsForPosts = (html) => {
-    if (!isPostPage()) return html;
-    
-    // Fix image sources
-    html = html.replace(/src="img\//g, 'src="../../img/');
-    
-    // Fix HTML links
-    html = html.replace(/href="([^"]*\.html)"/g, (match, p1) => {
-        if (p1.startsWith('http') || p1.startsWith('#')) {
-            return match;
-        }
-        return `href="../../${p1}"`;
-    });
-    
-    return html;
+const adjustPathsForNestedPages = (html) => {
+  if (!isNestedContentPage()) return html;
+
+  html = html.replace(/src="img\//g, 'src="../../img/');
+
+  html = html.replace(/href="([^"]*\.html)"/g, (match, p1) => {
+    if (p1.startsWith('http') || p1.startsWith('#') || p1.startsWith('../../')) {
+      return match;
+    }
+
+    return `href="../../${p1}"`;
+  });
+
+  return html;
 };
 
 /**
@@ -208,14 +221,16 @@ async function loadHeader() {
     const placeholder = getElement(SELECTORS.HEADER_PLACEHOLDER);
     if (!placeholder) return;
     
-    const headerPath = isPostPage() ? '../../header.html' : 'header.html';
+    // const headerPath = isPostPage() ? '../../header.html' : 'header.html';
+
+    const headerPath = getRelativeRootPath() + 'header.html';
     
     try {
         const response = await fetch(headerPath);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
         let html = await response.text();
-        html = adjustPathsForPosts(html);
+        html = adjustPathsForNestedPages(html);
         
         placeholder.innerHTML = html;
         
@@ -237,14 +252,16 @@ async function loadFooter() {
     const placeholder = getElement(SELECTORS.FOOTER_PLACEHOLDER);
     if (!placeholder) return;
     
-    const footerPath = isPostPage() ? '../../footer.html' : 'footer.html';
+    // const footerPath = isPostPage() ? '../../footer.html' : 'footer.html';
+
+    const footerPath = getRelativeRootPath() + 'footer.html';
     
     try {
         const response = await fetch(footerPath);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         
         let html = await response.text();
-        html = adjustPathsForPosts(html);
+        html = adjustPathsForNestedPages(html);
         
         placeholder.innerHTML = html;
         
@@ -756,6 +773,457 @@ function initPaginationButtons() {
     }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// PROJECTS FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function escapeHTML(value) {
+  if (value === null || value === undefined) return '';
+
+  return String(value).replace(/[&<>"']/g, function(character) {
+    return {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#039;'
+    }[character];
+  });
+}
+
+function getResearchLineInfo(researchLineId) {
+  const researchLines = {
+    quantum_imaging: {
+      label: 'Quantum Imaging',
+      url: 'quantum_imaging.html'
+    },
+    optical_computing: {
+      label: 'Optical Computing',
+      url: 'optical_computing.html'
+    },
+    paraxial_fluids: {
+      label: 'Paraxial Fluids of Light',
+      url: 'paraxial_fluids_of_light.html'
+    },
+    spectral_imaging: {
+      label: 'Spectral Imaging',
+      url: 'spectral_imaging.html'
+    }
+  };
+
+  return researchLines[researchLineId] || {
+    label: 'Research Line',
+    url: 'research_lines.html'
+  };
+}
+
+function updateProjectBreadcrumb(project) {
+  const breadcrumb = document.querySelector('.project-breadcrumb');
+  if (!breadcrumb) return;
+
+  const researchLine = getResearchLineInfo(project.research_line);
+
+  breadcrumb.innerHTML = `
+    <a href="${getRelativeRootPath()}${researchLine.url}">${escapeHTML(researchLine.label)}</a>
+    <span>/</span>
+    <span>${escapeHTML(project.title)}</span>
+  `;
+}
+
+function parseProjectDate(dateString) {
+  if (!dateString) return new Date(0);
+  const parsedDate = new Date(dateString);
+  return Number.isNaN(parsedDate.getTime()) ? new Date(0) : parsedDate;
+}
+
+function formatProjectDate(dateString) {
+  if (!dateString) return 'Present';
+
+  const parsedDate = parseProjectDate(dateString);
+  if (parsedDate.getTime() === 0) return dateString;
+
+  return parsedDate.toLocaleDateString('en-GB', {
+    year: 'numeric',
+    month: 'short'
+  });
+}
+
+function getProjectUrl(project) {
+  const indexFile = project.index_file || 'index.html';
+  return `${getRelativeRootPath()}projects/${project.folder}/${indexFile}`;
+}
+
+function getProjectThumbnailUrl(project) {
+  const thumbnail = project.thumbnail || 'thumbnail.jpg';
+  return `${getRelativeRootPath()}projects/${project.folder}/${thumbnail}`;
+}
+
+function createOngoingProjectCard(project) {
+  return `
+    <article class="project-card project-card-ongoing">
+      <a class="project-card-image" href="${getProjectUrl(project)}" aria-label="Read more about ${escapeHTML(project.title)}">
+        <img src="${getProjectThumbnailUrl(project)}" alt="${escapeHTML(project.title)} thumbnail" loading="lazy">
+      </a>
+
+      <div class="project-card-content">
+        <div class="project-status project-status-ongoing">Ongoing</div>
+        <h3>
+          <a href="${getProjectUrl(project)}">${escapeHTML(project.title)}</a>
+        </h3>
+        <p>${escapeHTML(project.summary)}</p>
+        <a class="btn project-read-more" href="${getProjectUrl(project)}">Read more</a>
+      </div>
+    </article>
+  `;
+}
+
+function createFinishedProjectCard(project) {
+  return `
+    <article class="project-card project-card-finished">
+      <a href="${getProjectUrl(project)}" aria-label="Read more about ${escapeHTML(project.title)}">
+        <div class="project-finished-image">
+          <img src="${getProjectThumbnailUrl(project)}" alt="${escapeHTML(project.title)} thumbnail" loading="lazy">
+        </div>
+        <h3>${escapeHTML(project.title)}</h3>
+      </a>
+    </article>
+  `;
+}
+
+function sortOngoingProjects(projects) {
+  return [...projects].sort((a, b) => {
+    return parseProjectDate(b.start_date) - parseProjectDate(a.start_date);
+  });
+}
+
+function sortFinishedProjects(projects) {
+  return [...projects].sort((a, b) => {
+    const dateA = a.end_date || a.start_date;
+    const dateB = b.end_date || b.start_date;
+    return parseProjectDate(dateB) - parseProjectDate(dateA);
+  });
+}
+
+async function loadResearchLineProjects() {
+  const container = getElement(SELECTORS.PROJECTS_CONTAINER);
+  if (!container) return;
+
+  const researchLine = container.dataset.researchLine;
+  const projectsSection = container.closest('.projects-section');
+
+  if (!researchLine) {
+    if (projectsSection) {
+      projectsSection.style.display = 'none';
+    }
+    return;
+  }
+
+  try {
+    const response = await fetch(getRelativeRootPath() + 'projects/projects.json');
+    if (!response.ok) throw new Error('Failed to load projects.json');
+
+    const allProjects = await response.json();
+
+    const researchLineProjects = allProjects.filter(project => {
+      return project.research_line === researchLine;
+    });
+
+    const ongoingProjects = sortOngoingProjects(
+      researchLineProjects.filter(project => project.status === 'ongoing')
+    );
+
+    const finishedProjects = sortFinishedProjects(
+      researchLineProjects.filter(project => project.status === 'finished')
+    );
+
+    /*
+      If this research line has no projects at all,
+      hide the full Projects section, including the title.
+    */
+    if (ongoingProjects.length === 0 && finishedProjects.length === 0) {
+      if (projectsSection) {
+        projectsSection.style.display = 'none';
+      }
+
+      container.innerHTML = '';
+      return;
+    }
+
+    /*
+      If there are projects, make sure the section is visible.
+      This is useful in case the browser cached a hidden state.
+    */
+    if (projectsSection) {
+      projectsSection.style.display = '';
+    }
+
+    let html = '';
+
+    /*
+      Only show Ongoing Projects if there are ongoing projects.
+    */
+    if (ongoingProjects.length > 0) {
+      html += `
+        <div class="projects-group">
+          <h3>Ongoing Projects</h3>
+          <div class="ongoing-projects-grid">
+            ${ongoingProjects.map(createOngoingProjectCard).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    /*
+      Only show Past Projects if there are finished projects.
+    */
+    if (finishedProjects.length > 0) {
+      html += `
+        <div class="projects-group">
+          <h3>Past Projects</h3>
+          <div class="finished-projects-grid">
+            ${finishedProjects.map(createFinishedProjectCard).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    container.innerHTML = html;
+  } catch (error) {
+    console.error('Error loading projects:', error);
+
+    if (projectsSection) {
+      projectsSection.style.display = 'none';
+    }
+
+    container.innerHTML = '';
+  }
+}
+
+function createProjectMetaItem(label, value) {
+  if (!value) return '';
+
+  if (Array.isArray(value)) {
+    if (value.length === 0) return '';
+
+    return `
+      <div class="project-meta-item">
+        <span class="project-meta-label">${escapeHTML(label)}</span>
+        <span class="project-meta-value">${value.map(escapeHTML).join(', ')}</span>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="project-meta-item">
+      <span class="project-meta-label">${escapeHTML(label)}</span>
+      <span class="project-meta-value">${escapeHTML(value)}</span>
+    </div>
+  `;
+}
+
+function createProjectOutputsSection(outputs) {
+  if (!outputs) return '';
+
+  const outputLabels = {
+    publications: 'Publications',
+    software: 'Software / Code',
+    datasets: 'Datasets',
+    reports: 'Reports',
+    media: 'Videos / Media'
+  };
+
+  let html = '';
+
+  Object.keys(outputLabels).forEach(type => {
+    const items = outputs[type];
+
+    if (!Array.isArray(items) || items.length === 0) return;
+
+    html += `
+      <section class="project-output-group">
+        <h3>${outputLabels[type]}</h3>
+        <div class="project-output-list">
+          ${items.map(item => createProjectOutputItem(item)).join('')}
+        </div>
+      </section>
+    `;
+  });
+
+  if (!html) return '';
+
+  return `
+    <section class="project-outputs-section">
+      <h2>Outputs</h2>
+      ${html}
+    </section>
+  `;
+}
+
+function createProjectOutputItem(item) {
+  const title = item.title || 'Untitled output';
+  const description = item.description || '';
+  const authors = item.authors || '';
+  const venue = item.venue || '';
+  const year = item.year || '';
+  const url = item.url || '';
+
+  const titleHtml = url
+    ? `<a href="${escapeHTML(url)}" target="_blank" rel="noopener">${escapeHTML(title)}</a>`
+    : escapeHTML(title);
+
+  const metaParts = [authors, venue, year].filter(Boolean);
+
+  return `
+    <article class="project-output-item">
+      <h4>${titleHtml}</h4>
+      ${metaParts.length > 0 ? `<p class="project-output-meta">${metaParts.map(escapeHTML).join(' • ')}</p>` : ''}
+      ${description ? `<p>${escapeHTML(description)}</p>` : ''}
+    </article>
+  `;
+}
+
+async function createRelatedPostsSection(project) {
+  if (!Array.isArray(project.related_posts) || project.related_posts.length === 0) {
+    return '';
+  }
+
+  try {
+    const response = await fetch(getRelativeRootPath() + 'posts/posts.json');
+    if (!response.ok) throw new Error('Failed to load posts.json');
+
+    const posts = await response.json();
+
+    const relatedPosts = project.related_posts
+      .map(postId => posts.find(post => post.id === postId))
+      .filter(Boolean);
+
+    if (relatedPosts.length === 0) return '';
+
+    return `
+      <section class="project-related-posts">
+        <h2>Related News</h2>
+        <div class="project-related-posts-grid">
+          ${relatedPosts.map(createRelatedPostCard).join('')}
+        </div>
+      </section>
+    `;
+  } catch (error) {
+    console.error('Error loading related posts:', error);
+    return '';
+  }
+}
+
+function createRelatedPostCard(post) {
+  const href = post.external_url
+    ? post.external_url
+    : `${getRelativeRootPath()}posts/${post.folder}/${post.index_file_name}.html`;
+
+  const target = post.external_url ? ' target="_blank" rel="noopener"' : '';
+
+  return `
+    <article class="project-related-post-card">
+      <p class="project-related-post-type">${escapeHTML(post.postType || 'News')}</p>
+      <h3>
+        <a href="${href}"${target}>${escapeHTML(post.title)}</a>
+      </h3>
+      <p class="project-related-post-date">${escapeHTML(post.date || '')}</p>
+      <p>${escapeHTML(post.excerpt || '')}</p>
+    </article>
+  `;
+}
+
+// ${project.summary ? `<p class="project-detail-summary">${escapeHTML(project.summary)}</p>` : ''}
+
+function renderProjectHeader(project, relatedPostsHtml) {
+  const startDate = formatProjectDate(project.start_date);
+  const endDate = formatProjectDate(project.end_date);
+  const dateRange = `${startDate} – ${endDate}`;
+
+  return `
+    <header class="project-detail-header">
+      <div class="project-detail-text">
+        <div class="project-status ${project.status === 'ongoing' ? 'project-status-ongoing' : 'project-status-finished'}">
+          ${project.status === 'ongoing' ? 'Ongoing' : 'Finished'}
+        </div>
+
+        <h1>${escapeHTML(project.title)}</h1>
+
+        
+        
+        
+
+        <div class="project-meta-grid">
+          ${createProjectMetaItem('Period', dateRange)}
+          ${createProjectMetaItem('Principal Investigator', project.principal_investigator)}
+          ${createProjectMetaItem('Total Funding', project.total_funding)}
+          ${createProjectMetaItem('Reference', project.project_reference)}
+        </div>
+
+        ${
+          project.website
+            ? `<a class="btn project-website-link" href="${escapeHTML(project.website)}" target="_blank" rel="noopener">Project website</a>`
+            : ''
+        }
+      </div>
+
+      <div class="project-detail-image">
+        <img src="${escapeHTML(project.thumbnail || 'thumbnail.jpg')}" alt="${escapeHTML(project.title)} thumbnail">
+      </div>
+    </header>
+
+    ${createProjectOutputsSection(project.outputs)}
+    ${relatedPostsHtml}
+  `;
+}
+
+async function loadProjectPage() {
+  const detailContainer = getElement(SELECTORS.PROJECT_DETAIL_CONTAINER);
+  const markdownContainer = getElement(SELECTORS.PROJECT_MARKDOWN_CONTENT);
+
+  if (!detailContainer || !markdownContainer) return;
+
+  try {
+    const pathParts = window.location.pathname.split('/').filter(Boolean);
+    const projectsIndex = pathParts.indexOf('projects');
+
+    const projectFolder = projectsIndex !== -1
+        ? pathParts[projectsIndex + 1]
+        : pathParts[pathParts.length - 2];
+
+    const projectsResponse = await fetch(getRelativeRootPath() + 'projects/projects.json');
+    if (!projectsResponse.ok) throw new Error('Failed to load projects.json');
+
+    const projects = await projectsResponse.json();
+    const currentProject = projects.find(project => project.folder === projectFolder);
+
+    if (!currentProject) {
+      throw new Error(`Project not found: ${projectFolder}`);
+    }
+
+    updateProjectBreadcrumb(currentProject);
+
+    document.title = `${currentProject.title} | QUANTOS Research Team`;
+
+    const relatedPostsHtml = await createRelatedPostsSection(currentProject);
+    detailContainer.innerHTML = renderProjectHeader(currentProject, relatedPostsHtml);
+
+    const contentFile = currentProject.content_file || 'content.md';
+    const markdownResponse = await fetch(contentFile);
+
+    if (!markdownResponse.ok) {
+      markdownContainer.innerHTML = '<p>No project description available yet.</p>';
+      return;
+    }
+
+    const markdown = await markdownResponse.text();
+    renderMarkdown(markdownContainer, markdown);
+  } catch (error) {
+    console.error('Error loading project page:', error);
+    detailContainer.innerHTML = '<p>Error loading project. Please try again later.</p>';
+    markdownContainer.innerHTML = '';
+  }
+}
+
 
 // ═══════════════════════════════════════════════════════════════════════════
 // 10. CONTENT LOADING FUNCTIONS
@@ -766,7 +1234,8 @@ function initPaginationButtons() {
  */
 async function loadSiteVariables() {
     try {
-        const variablesPath = isPostPage() ? '../../variables.json' : 'variables.json';
+        // const variablesPath = isPostPage() ? '../../variables.json' : 'variables.json';
+        const variablesPath = getRelativeRootPath() + 'variables.json';
         const response = await fetch(variablesPath);
         
         if (!response.ok) throw new Error('Failed to load variables');
@@ -902,6 +1371,14 @@ function init() {
     
     if (getElement(SELECTORS.POST_CONTENT)) {
         loadMarkdownContent();
+    }
+
+     if (getElement(SELECTORS.PROJECTS_CONTAINER)) {
+    loadResearchLineProjects();
+    }
+
+    if (getElement(SELECTORS.PROJECT_DETAIL_CONTAINER)) {
+        loadProjectPage();
     }
 }
 
