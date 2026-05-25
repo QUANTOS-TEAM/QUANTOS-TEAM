@@ -18,7 +18,7 @@ At a strategic level, HyperQuIm’s approach to hyperspectral imaging based on q
 
 The project aims to tackle the following objectives
 
-### Objective 1 - Build a strong hyperspectral imaging system with wavefront shaping control
+#### Objective 1 - Build a strong hyperspectral imaging system with wavefront shaping control
 
 <div style="height: 20px;"></div>
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2rem auto; text-align: center;">
@@ -26,7 +26,7 @@ The project aims to tackle the following objectives
   <figcaption style="font-style: italic; font-size: 0.9rem; color: #666; margin-top: 0.5rem;">Figure 1 - Graphical summary of objective 1.</figcaption>
 </figure>
 
-### Objective 2 - Test, explore and benchmark hyperspectral quantum imaging capabilities
+#### Objective 2 - Test, explore and benchmark hyperspectral quantum imaging capabilities
 
 <div style="height: 20px;"></div>
 <figure style="display: flex; flex-direction: column; align-items: center; margin: 2rem auto; text-align: center;">
