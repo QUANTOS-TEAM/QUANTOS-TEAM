@@ -1,7 +1,32 @@
 [
+
+    {
+    "id": "NextGenPFL",
+    "folder": "NextGenPFL",
+    "index_file": "nextgenpfl_index.html",
+    "title": "Next generation of paraxial fluids of light for versatile analogue quantum simulators",
+    "research_line": "paraxial_fluids",
+    "status": "ongoing",
+    "start_date": "2025-05-01",
+    "end_date": "",
+    "summary": "HyperQuIm pioneers compact quantum hyperspectral imaging by using visible-light detection to reveal infrared molecular signatures, combining IUP, adaptive optics, wavefront shaping, and AI to enable robust real-world sensing across healthcare, industry, environment, and defense.",
+    "thumbnail": "thumbnail.png",
+    "content_file": "nextgenpfl_content.md",
+    "principal_investigator": "Dr. Tiago D. Ferreira",
+    "total_funding": "5.000,00€",
+    "funding_agency": "FCT: Fundação para a Ciência e a Tecnologia",
+    "project_reference": "2024.07025.CBM",
+    "website": "",
+    "related_posts": [
+      ""
+    ]
+  },
+
+
+
   {
     "id": "hyperquim",
-    "folder": "hyperquim",
+    "folder": "Hyperquim",
     "index_file": "hyperquim_index.html",
     "title": "HyperQuIm: Hyperspectral Quantum Imaging with Undetected Photons",
     "research_line": "quantum_imaging",
