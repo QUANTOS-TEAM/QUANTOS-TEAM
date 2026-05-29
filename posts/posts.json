@@ -1,12 +1,24 @@
 
 [   
+    {
+        "id": "post_2026_05_29",
+        "folder": "post_2026_05_29",
+        "index_file_name": "index_2026_05_29",
+        "md_file_name": "content_2026_05_29",
+        "title": "Joana Teixeira Wins Best Student Paper Award at SPIE Photonics Europe",
+        "date": "May 29, 2026",
+        "postType": "News",
+        "excerpt": "Joana Teixeira received the Best Student Paper Award for the work “Multipoint optical fiber speckle sensing with event-based sensors for high-bandwidth applications” at the Optical Sensing and Detection IX subconference, part of the SPIE Photonics Europe International Symposium, held from 12 to 16 April 2026 in Strasbourg, France.",
+        "tags": ["news", "highlight"],
+        "author": "Tiago Ferreira"
+    },
 
     {
         "id": "post_2026_05_25",
         "folder": "post_2026_05_25",
         "index_file_name": "index_2026_05_25",
         "md_file_name": "content_2026_05_25",
-        "title": "QUANTOS Members Visit the Paraxial Fluids of Light Group at Laboratoire Kastler Brossel, Sorbonne University, France.",
+        "title": "QUANTOS Members Visit the Paraxial Fluids of Light Group at Laboratoire Kastler Brossel, Sorbonne University, France",
         "date": "May 25, 2026",
         "postType": "News",
         "excerpt": "From 18 to 22 May, Tiago Ferreira and Nuno Silva visited the Quantum Fluids of Light group at Laboratoire Kastler Brossel, Sorbonne University, France.",
@@ -64,7 +76,7 @@
         "date": "April 07, 2026",
         "postType": "News",
         "excerpt": "New Paper Published in Sensors: Real-Time Probing of Molecular Affinity Using Optical Tweezers. This work establishes a robust foundation for using optical tweezers-based tools to probe the mechanical and optical changes of biomolecular interactions.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Joana Teixeira"
     },
 
@@ -73,7 +85,7 @@
         "folder": "post_2026_02_09",
         "index_file_name": "index_2026_02_09",
         "md_file_name": "content_2026_02_09",
-        "title": "QUANTOS at EMSLIBS 2025: International Recognition in Cultural Heritage, Industrial Monitoring, and Data Processing.",
+        "title": "QUANTOS at EMSLIBS 2025: International Recognition in Cultural Heritage, Industrial Monitoring, and Data Processing",
         "date": "February 09, 2026",
         "postType": "News",
         "excerpt": "Researchers from Quantos participated in EMSLIBS 2025 (International Conference on Laser-Induced Breakdown Spectroscopy), held in Senlis, France from 26th to 30th January 2026.",
