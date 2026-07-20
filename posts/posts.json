@@ -1,6 +1,21 @@
 
 [   
     {
+        "id": "post_2026_07_06",
+        "folder": "post_2026_07_06",
+        "index_file_name": "index_2026_07_06",
+        "md_file_name": "content_2026_07_06",
+        "title": "QUANTOS member Tiago Ferreira participates in the “Quantum-SOPHA and Armchairs” workshop in Peyresq, France",
+        "date": "July 6, 2026",
+        "postType": "News",
+        "excerpt": "Tiago Ferreira was invited to participate in the “Quantum-SOPHA and Armchairs” workshop, held from 29 June to 3 July 2026 in Peyresq, a village in the French Alps.",
+        "tags": ["news", "highlight"],
+        "author": "Tiago Ferreira",
+        "related_projects": ["hyperquim"]
+    },
+
+
+    {
         "id": "post_2026_06_23",
         "folder": "post_2026_06_23",
         "index_file_name": "index_2026_06_23",
