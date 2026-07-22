@@ -1,6 +1,20 @@
 
 [   
     {
+        "id": "post_2026_07_22",
+        "folder": "post_2026_07_22",
+        "index_file_name": "index_2026_07_22",
+        "md_file_name": "content_2026_07_22",
+        "title": "New Publication in Sensors and Actuators A. Physical: Asynchronous event-based spectroscopy for microsecond-resolved spectral reconstruction",
+        "date": "July 22, 2026",
+        "postType": "News",
+        "excerpt": "Our team's latest research, \"Asynchronous event-based spectroscopy for microsecond-resolved spectral reconstruction,\" has been recently published in Sensors and Actuators: A. Physical.  ",
+        "tags": ["news", "highlight"],
+        "author": "Tiago Ferreira"
+    },
+
+
+    {
         "id": "post_2026_07_06",
         "folder": "post_2026_07_06",
         "index_file_name": "index_2026_07_06",
@@ -66,7 +80,7 @@
         "date": "May 29, 2026",
         "postType": "News",
         "excerpt": "Joana Teixeira and Tomás Lopes received the Best Student Paper Award for the work “Multipoint optical fiber speckle sensing with event-based sensors for high-bandwidth applications” at the Optical Sensing and Detection IX subconference, part of the SPIE Photonics Europe International Symposium, held from 12 to 16 April 2026 in Strasbourg, France.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Tiago Ferreira"
     },
 
@@ -79,7 +93,7 @@
         "date": "May 25, 2026",
         "postType": "News",
         "excerpt": "From 18 to 22 May, Tiago Ferreira and Nuno Silva visited the Quantum Fluids of Light group at Laboratoire Kastler Brossel, Sorbonne University, France.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Tiago Ferreira",
         "related_projects": ["NextGenPFL"]
     },
@@ -93,7 +107,7 @@
         "date": "April 27, 2026",
         "postType": "News",
         "excerpt": "From April 12th to 16th, 2026, QUANTOS team members Joana Teixeira and Tomás Lopes participated in SPIE Photonics Europe, held in Strasbourg, France.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Joana Teixeira"
     },
 
@@ -106,7 +120,7 @@
         "date": "April 27, 2026",
         "postType": "News",
         "excerpt": "The QUANTOS team was present in the Quantum Day @PT 2026 conference, held at the Academia de Ciências, in Lisbon, Portugal.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Carolina Gonçalves",
         "related_projects": ["hyperquim"]
     },
@@ -121,7 +135,7 @@
         "date": "April 20, 2026",
         "postType": "News",
         "excerpt": "From 29th of March to the 2nd of April, Researchers from QUANTOS participated in the Iberian-German WE-Heraeus Seminar 2026 on Topology, held at the International Iberian Nanotechnology Laboratory (INL)",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Vicente Rocha"
     },
     {
