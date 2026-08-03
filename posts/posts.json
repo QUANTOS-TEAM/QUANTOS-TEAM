@@ -37,7 +37,7 @@
         "date": "July 22, 2026",
         "postType": "News",
         "excerpt": "Our team's latest research, \"Asynchronous event-based spectroscopy for microsecond-resolved spectral reconstruction,\" has been recently published in Sensors and Actuators: A. Physical.  ",
-        "tags": ["news", "highlight"],
+        "tags": ["news", "paper", "highlight"],
         "author": "Joana Teixeira"
     },
 
@@ -66,7 +66,7 @@
         "date": "June 23, 2026",
         "postType": "News",
         "excerpt": "Our latest research, Probing a theoretical framework for a photonic extreme learning machine, has been published in New Journal of Physics. The study develops a theoretical framework for Photonic Extreme Learning Machines (PELMs), clarifying how optical components can be connected to the mathematical requirements of the Extreme Learning Machine (ELM) paradigm.",
-        "tags": ["news", "highlight"],
+        "tags": ["news", "paper", "highlight"],
         "author": "Vicente Rocha"
     },
 
@@ -80,7 +80,7 @@
         "date": "June 3, 2026",
         "postType": "News",
         "excerpt": "Our latest research, Event-based speckle interrogation for high-bandwidth multi-point optical fiber sensing, has been recently published in Sensors and Actuators: A. Physical. The study describes a novel interrogation framework that introduces event-based vision to achieve high throughput, high bandwidth, and low-latency speckle analysis for multi-point fiber optic sensing.",
-        "tags": ["news", "highlight"],
+        "tags": ["news", "paper"],
         "author": "Joana Teixeira"
     },
 
@@ -93,7 +93,7 @@
         "date": "June 3, 2026",
         "postType": "News",
         "excerpt": "Our first work in the field of quantum optical technologies has been accepted by APL Photonics. The paper will appear in the Invited Articles section and presents our proof-of-concept research on tracking fast-axis orientation using Hong-Ou-Mandel (HOM) interference.",
-        "tags": ["news", "highlight"],
+        "tags": ["news", "paper"],
         "author": "Carolina Gonçalves",
         "related_projects": ["hyperquim"]
     },
@@ -175,7 +175,7 @@
         "date": "April 07, 2026",
         "postType": "News",
         "excerpt": "New Paper Published in Sensors: Real-Time Probing of Molecular Affinity Using Optical Tweezers. This work establishes a robust foundation for using optical tweezers-based tools to probe the mechanical and optical changes of biomolecular interactions.",
-        "tags": ["news"],
+        "tags": ["news", "paper"],
         "author": "Joana Teixeira"
     },
 
