@@ -1,7 +1,20 @@
 
 [   
+    {
+        "id": "post_2026_08_03",
+        "folder": "post_2026_08_03",
+        "index_file_name": "index_2026_08_03",
+        "md_file_name": "content_2026_08_03",
+        "title": "QUANTOS team at the 7th International Conference on Applications of Optics and Photonics",
+        "date": "August 3, 2026",
+        "postType": "News",
+        "excerpt": "From July 7th to 10th, Carolina Gonçalves, Luana Pereira and Sofia Duarte from QUANTOS participated in the 7th International Conference on Applications of Optics and Photonics (AOP 2026), held in Lisbon, Portugal.",
+        "tags": ["news", "highlight"],
+        "author": "Carolina Gonçalves",
+        "related_projects": ["hyperquim"]
+    },
 
-{
+    {
         "id": "post_2026_07_27",
         "folder": "post_2026_07_27",
         "index_file_name": "index_2026_07_27",
