@@ -860,6 +860,29 @@ main {
   text-decoration: underline;
 }
 
+
+/* Past visiting researchers */
+.past-visitors-grid {
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.2rem;
+}
+
+.past-visitors-grid .member-image {
+  width: 112px;
+  height: 112px;
+  margin-bottom: 0.75rem;
+}
+
+.past-visitors-grid .member-name {
+  font-size: 1rem;
+  margin-bottom: 0.3rem;
+}
+
+.past-visitors-grid .member-role {
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    16. PUBLICATIONS
    ═══════════════════════════════════════════════════════════════════════════ */
