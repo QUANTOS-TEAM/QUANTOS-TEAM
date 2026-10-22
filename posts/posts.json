@@ -1,5 +1,17 @@
-
 [   
+    {
+        "id": "post_2026_10_22",
+        "folder": "post_2026_10_22",
+        "index_file_name": "index_2026_10_22",
+        "md_file_name": "content_2026_10_22",
+        "title": "New Publication in Optics Letters: Event-Based Vision Opens New Possibilities for Photonic Extreme Learning Machines",
+        "date": "October 22, 2026",
+        "postType": "News",
+        "excerpt": "The study explores how event-based cameras can provide alternative nonlinear responses for Photonic Extreme Learning Machines (PELMs), improving their ability to solve challenging classification tasks.",
+        "tags": ["news", "paper", "highlight"],
+        "author": "Vicente Rocha"
+    },    
+
     {
         "id": "post_2026_10_12",
         "folder": "post_2026_10_12",
@@ -65,7 +77,7 @@
         "date": "July 27, 2026",
         "postType": "News",
         "excerpt": "From 14 to 17 July 2026, members of the QUANTOS research team participated in the 1st IBEROLIBS International Scientific Congress, held in O Porriño, in the Vigo area of Galicia, Spain.",
-        "tags": ["news", "highlight"],
+        "tags": ["news"],
         "author": "Rafael Cavaco"
     },
 
@@ -79,7 +91,7 @@
         "date": "July 22, 2026",
         "postType": "News",
         "excerpt": "Our team's latest research, \"Asynchronous event-based spectroscopy for microsecond-resolved spectral reconstruction,\" has been recently published in Sensors and Actuators: A. Physical.  ",
-        "tags": ["news", "paper", "highlight"],
+        "tags": ["news", "paper"],
         "author": "Joana Teixeira"
     },
 
@@ -93,7 +105,7 @@
         "date": "July 6, 2026",
         "postType": "News",
         "excerpt": "Tiago Ferreira was invited to participate in the “Quantum-SOPHA and Armchairs” workshop, held from 29 June to 3 July 2026 in Peyresq, a village in the French Alps.",
-        "tags": ["news", "highlight"],
+        "tags": ["news" ],
         "author": "Tiago Ferreira",
         "related_projects": ["hyperquim"]
     },
